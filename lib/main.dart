@@ -1,12 +1,11 @@
+import 'package:Hisabi/Splash-Screen/splashScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/Splash-Screen/splashScreen.dart';
-import 'package:flutter_project/Splash-Screen/startupScreen.dart';
 import 'package:get/get.dart';
 
 void main() {
   runApp(
     GetMaterialApp(
-      home: Startupscreen(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     ),
   );
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Startupscreen(),
+      home: SplashScreen(),
     );
   }
 }

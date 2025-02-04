@@ -19,7 +19,7 @@ class _Startupscreen extends State<Startupscreen> {
         height: height,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(24, 45, 24, 35),
+          padding: const EdgeInsetsDirectional.fromSTEB(24, 60, 24, 35),
           child: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
