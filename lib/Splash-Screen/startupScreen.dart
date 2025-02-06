@@ -1,3 +1,4 @@
+import 'package:Hisabi/Login-Screen/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -66,7 +67,7 @@ class _Startupscreen extends State<Startupscreen> {
                       ),
                       SizedBox(height: 24),
                       Container(
-                        height: 60,
+                        height: 54,
                         width: width,
                         child: TextButton(
                           style: TextButton.styleFrom(
@@ -75,7 +76,13 @@ class _Startupscreen extends State<Startupscreen> {
                               borderRadius: BorderRadius.circular(24),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()),
+                            );
+                          },
                           child: Text(
                             'Get Started',
                             style: TextStyle(
