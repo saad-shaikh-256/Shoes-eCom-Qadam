@@ -40,6 +40,7 @@ flutter:
     - assets/icons/lockIcon.svg
     - assets/icons/viewIcon.svg
     - assets/icons/hideIcon.svg
+    - assets/icons/cartIcon.svg
     - assets/icons/searchIcon.svg
     - assets/Images/Home/profile.png
     - assets/Images/Home/Shoes/Shoes1.png

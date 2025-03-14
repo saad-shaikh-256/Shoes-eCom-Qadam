@@ -1,3 +1,4 @@
+import 'package:Hisabi/Home-Screen/productDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -206,62 +207,73 @@ class homeScreenState extends State<homeScreen> {
                   ),
                   itemCount: products.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      color: Colors.transparent, // Remove background color
-                      elevation: 0, // Optional: Remove elevation if desired
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 180,
-                            // Fixed height
-                            width: double.infinity,
-                            // Ensure full width of the card
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(16),
-                              ),
-                              child: Image.asset(
-                                products[index]['image'],
-                                fit: BoxFit.cover,
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigate to the productDetail screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => productDetail(),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        color: Colors.transparent, // Remove background color
+                        elevation: 0, // Optional: Remove elevation if desired
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 180,
+                              // Fixed height
+                              width: double.infinity,
+                              // Ensure full width of the card
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(16),
+                                ),
+                                child: Image.asset(
+                                  products[index]['image'],
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  products[index]['name'],
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xFF9e9e9e),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    products[index]['name'],
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFF9e9e9e),
+                                    ),
+                                    maxLines: 1, // Limit text to a single line
+                                    overflow: TextOverflow
+                                        .ellipsis, // Truncate overflow
                                   ),
-                                  maxLines: 1, // Limit text to a single line
-                                  overflow: TextOverflow
-                                      .ellipsis, // Truncate overflow
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  products[index]['price'],
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xFF424242),
-                                    fontWeight: FontWeight.bold,
+                                  SizedBox(height: 4),
+                                  Text(
+                                    products[index]['price'],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xFF424242),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    // Limit price text to a single line
+                                    overflow: TextOverflow
+                                        .ellipsis, // Truncate overflow
                                   ),
-                                  maxLines: 1,
-                                  // Limit price text to a single line
-                                  overflow: TextOverflow
-                                      .ellipsis, // Truncate overflow
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
