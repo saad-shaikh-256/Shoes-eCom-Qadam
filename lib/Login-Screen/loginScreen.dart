@@ -1,6 +1,8 @@
+import 'package:Hisabi/Login-Screen/forgotPassword.dart';
 import 'package:Hisabi/Login-Screen/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Hisabi/Home-Screen/homeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -8,7 +10,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
-  @override
   bool isHidden = true;
   var formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
@@ -17,17 +18,36 @@ class _LoginScreen extends State<LoginScreen> {
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
 
+  String? emailError;
+  String? passwordError;
+
   void submit() {
+    setState(() {
+      emailError = null;
+      passwordError = null;
+    });
+
     if (formKey.currentState?.validate() ?? false) {
       String email = emailController.text.trim();
       String password = passwordController.text.trim();
-      print('Email: $email');
-      print('Password: $password');
-    } else {
-      print("Data is Invalid");
+
+      // Check if the email and password match the required credentials
+      if (email == "client@gmail.com" && password == "client") {
+        // Navigate to the home screen if credentials are correct
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => homeScreen()),
+        );
+      } else {
+        // Show an error message if credentials are incorrect
+        setState(() {
+          passwordError = "Invalid email or password";
+        });
+      }
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
     final double width = size.width;
@@ -69,142 +89,187 @@ class _LoginScreen extends State<LoginScreen> {
                       ),
                       SizedBox(height: 56),
                       Form(
-                          key: formKey,
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 52,
-                                width: width,
-                                child: TextFormField(
-                                  focusNode: emailFocusNode,
-                                  controller: emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: SvgPicture.asset(
-                                        'assets/icons/mailIcon.svg',
-                                        width: 20.0,
-                                        height: 20.0,
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    filled: true,
-                                    fillColor: Color(0xFFFAFAFA),
-                                    hintText: 'Email',
-                                    hintStyle: TextStyle(
-                                      color: Color(0xff9E9E9E),
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: BorderSide(
-                                          color: Color(0x8BFF8D41), width: 1),
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            // Email Input Field
+                            Container(
+                              height: 52,
+                              width: width,
+                              child: TextFormField(
+                                focusNode: emailFocusNode,
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  prefixIcon: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: SvgPicture.asset(
+                                      'assets/icons/mailIcon.svg',
+                                      width: 20.0,
+                                      height: 20.0,
                                     ),
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Enter your email';
-                                    }
-                                  },
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  fillColor: Color(0xFFFAFAFA),
+                                  hintText: 'Email',
+                                  hintStyle: TextStyle(
+                                    color: Color(0xff9E9E9E),
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide(
+                                        color: Color(0x8BFF8D41), width: 1),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    emailError = null;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Enter your email';
+                                  } else if (!RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(value)) {
+                                    return 'Enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            if (emailError != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  emailError!,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontFamily: 'Inter',
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
-                              SizedBox(height: 20),
-                              Container(
-                                height: 52,
-                                width: width,
-                                child: TextFormField(
-                                  focusNode: passwordFocusNode,
-                                  controller: passwordController,
-                                  obscureText: isHidden,
-                                  decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: BorderSide(
-                                          color: Color(0x8BFF8D41), width: 1),
-                                    ),
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: SvgPicture.asset(
-                                        'assets/icons/lockIcon.svg',
-                                        width: 20.0,
-                                        height: 20.0,
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    filled: true,
-                                    fillColor: Color(0xFFFAFAFA),
-                                    hintText: 'Password',
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isHidden = !isHidden;
-                                        });
-                                      },
-                                      icon: isHidden
-                                          ? SvgPicture.asset(
-                                              'assets/icons/viewIcon.svg',
-                                              width: 20.0,
-                                              height: 20.0,
-                                            )
-                                          : SvgPicture.asset(
-                                              'assets/icons/hideIcon.svg',
-                                              width: 20.0,
-                                              height: 20.0,
-                                            ),
-                                    ),
-                                    hintStyle: TextStyle(
-                                      color: Color(0xff9E9E9E),
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
+                            SizedBox(height: 20),
+
+                            // Password Input Field
+                            Container(
+                              height: 52,
+                              width: width,
+                              child: TextFormField(
+                                focusNode: passwordFocusNode,
+                                controller: passwordController,
+                                obscureText: isHidden,
+                                decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide(
+                                        color: Color(0x8BFF8D41), width: 1),
+                                  ),
+                                  prefixIcon: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: SvgPicture.asset(
+                                      'assets/icons/lockIcon.svg',
+                                      width: 20.0,
+                                      height: 20.0,
                                     ),
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Enter your password';
-                                    }
-                                  },
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  fillColor: Color(0xFFFAFAFA),
+                                  hintText: 'Password',
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        isHidden = !isHidden;
+                                      });
+                                    },
+                                    icon: isHidden
+                                        ? SvgPicture.asset(
+                                      'assets/icons/viewIcon.svg',
+                                      width: 20.0,
+                                      height: 20.0,
+                                    )
+                                        : SvgPicture.asset(
+                                      'assets/icons/hideIcon.svg',
+                                      width: 20.0,
+                                      height: 20.0,
+                                    ),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    color: Color(0xff9E9E9E),
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    passwordError = null;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Enter your password';
+                                  } else if (value.length < 6) {
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            if (passwordError != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  passwordError!,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontFamily: 'Inter',
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
-                              SizedBox(height: 8),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Signupscreen()),
-                                    );
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "Forgot Password?",
-                                        style: TextStyle(
-                                          color: Color(0xFFFF8D41),
-                                          fontFamily: 'Inter',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                        ),
+                            SizedBox(height: 8),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => forgotPassword()),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Forgot Password?",
+                                      style: TextStyle(
+                                        color: Color(0xFFFF8D41),
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
                                       ),
-                                    ],
-                                  ))
-                            ],
-                          ))
+                                    ),
+                                  ],
+                                ))
+                          ],
+                        ),
+                      )
                     ],
                   ),
 
                   // Bottom Button
-
                   Container(
                     width: width,
                     child: Column(
@@ -216,7 +281,7 @@ class _LoginScreen extends State<LoginScreen> {
                             style: TextButton.styleFrom(
                               backgroundColor: Color(0xFFFF8D41),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                             onPressed: submit,

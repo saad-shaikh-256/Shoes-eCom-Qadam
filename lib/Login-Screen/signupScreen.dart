@@ -1,6 +1,7 @@
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Hisabi/Home-Screen/homeScreen.dart';
 
 class Signupscreen extends StatefulWidget {
   @override
@@ -20,17 +21,37 @@ class _SignUpScreen extends State<Signupscreen> {
   FocusNode phoneFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
 
+  String? emailError; // To store email validation error
+
   void submit() {
+    setState(() {
+      emailError = null; // Clear previous email error
+    });
+
     if (formKey.currentState?.validate() ?? false) {
       String name = nameController.text.trim();
       String email = emailController.text.trim();
       String phone = phoneController.text.trim();
       String password = passwordController.text.trim();
-      print('Name: $name');
-      print('Email: $email');
-      print('Phone: $phone');
-      print('Password: $password');
-      // You can add your sign-up logic here
+
+      // Simulate checking if the email is already registered
+      if (email == "client@gmail.com") {
+        setState(() {
+          emailError = "User already registered with this email";
+        });
+      } else {
+        // Proceed with registration logic
+        print('Name: $name');
+        print('Email: $email');
+        print('Phone: $phone');
+        print('Password: $password');
+
+        // Navigate to the home screen after successful registration
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => homeScreen()),
+        );
+      }
     } else {
       print("Data is Invalid");
     }
@@ -77,6 +98,7 @@ class _SignUpScreen extends State<Signupscreen> {
                         key: formKey,
                         child: Column(
                           children: [
+                            // Full Name Field
                             Container(
                               height: 52,
                               width: width,
@@ -120,6 +142,8 @@ class _SignUpScreen extends State<Signupscreen> {
                               ),
                             ),
                             SizedBox(height: 20),
+
+                            // Email Field
                             Container(
                               height: 52,
                               width: width,
@@ -155,15 +179,38 @@ class _SignUpScreen extends State<Signupscreen> {
                                     fontSize: 16,
                                   ),
                                 ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    emailError = null; // Clear error on typing
+                                  });
+                                },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Enter your email';
+                                  } else if (!RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(value)) {
+                                    return 'Enter a valid email';
                                   }
                                   return null;
                                 },
                               ),
                             ),
+                            if (emailError != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  emailError!,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontFamily: 'Inter',
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
                             SizedBox(height: 20),
+
+                            // Phone Field
                             Container(
                               height: 52,
                               width: width,
@@ -208,6 +255,8 @@ class _SignUpScreen extends State<Signupscreen> {
                               ),
                             ),
                             SizedBox(height: 20),
+
+                            // Password Field
                             Container(
                               height: 52,
                               width: width,
@@ -250,20 +299,22 @@ class _SignUpScreen extends State<Signupscreen> {
                                     },
                                     icon: isPasswordHidden
                                         ? SvgPicture.asset(
-                                            'assets/icons/viewIcon.svg',
-                                            width: 20.0,
-                                            height: 20.0,
-                                          )
+                                      'assets/icons/viewIcon.svg',
+                                      width: 20.0,
+                                      height: 20.0,
+                                    )
                                         : SvgPicture.asset(
-                                            'assets/icons/hideIcon.svg',
-                                            width: 20.0,
-                                            height: 20.0,
-                                          ),
+                                      'assets/icons/hideIcon.svg',
+                                      width: 20.0,
+                                      height: 20.0,
+                                    ),
                                   ),
                                 ),
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Enter your password';
+                                  } else if (value.length < 6) {
+                                    return 'Password must be at least 6 characters';
                                   }
                                   return null;
                                 },
@@ -287,7 +338,7 @@ class _SignUpScreen extends State<Signupscreen> {
                             style: TextButton.styleFrom(
                               backgroundColor: Color(0xFFFF8D41),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                             onPressed: submit,

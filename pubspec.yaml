@@ -14,6 +14,8 @@ dependencies:
   get: ^4.6.5
 
   cupertino_icons: ^1.0.0
+  firebase_core: ^3.12.1
+  flutterfire_cli: ^0.2.7
 
 dev_dependencies:
   flutter_test:
@@ -39,5 +41,7 @@ flutter:
     - assets/icons/lockIcon.svg
     - assets/icons/viewIcon.svg
     - assets/icons/hideIcon.svg
+    - assets/icons/searchIcon.svg
+    - assets/Images/Home/profile.png
 
   uses-material-design: true

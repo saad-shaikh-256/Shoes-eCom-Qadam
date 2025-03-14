@@ -16,16 +16,13 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // Initialize the AnimationController with the duration for the animation
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
     );
 
-    // Define the slide animation (from right to center)
     _slideAnimation = Tween<Offset>(
       begin: Offset(-1.5, 0),
-      // Start from the right (1.5x the width of the screen)
       end: Offset(0, 0), // End at the center
     ).animate(CurvedAnimation(
       parent: _controller,
