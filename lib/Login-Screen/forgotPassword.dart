@@ -4,35 +4,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Hisabi/Home-Screen/homeScreen.dart';
 
-
 class forgotPassword extends StatefulWidget {
   @override
   _forgotPassword createState() => _forgotPassword();
 }
 
 class _forgotPassword extends State<forgotPassword> {
-  @override
   bool isHidden = true;
   var formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
   FocusNode emailFocusNode = FocusNode();
 
+  String? emailError; // To store email validation error
+
   void submit() {
+    setState(() {
+      emailError = null; // Clear previous email error
+    });
+
     if (formKey.currentState?.validate() ?? false) {
       String email = emailController.text.trim();
-      print('Email: $email');
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => homeScreen()), // Add your HomeScreen widget
-      );
+      // Check if the email is "client@gmail.com"
+      if (email == "client@gmail.com") {
+        // Redirect to home screen if email is correct
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => homeScreen()),
+        );
+      } else {
+        // Show error message if email is not found
+        setState(() {
+          emailError = "No email found";
+        });
+      }
     } else {
       print("Data is Invalid");
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
     final double width = size.width;
@@ -77,6 +89,7 @@ class _forgotPassword extends State<forgotPassword> {
                         key: formKey,
                         child: Column(
                           children: [
+                            // Email Field
                             Container(
                               height: 52,
                               width: width,
@@ -112,13 +125,35 @@ class _forgotPassword extends State<forgotPassword> {
                                         color: Color(0x8BFF8D41), width: 1),
                                   ),
                                 ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    emailError = null; // Clear error on typing
+                                  });
+                                },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Enter your email';
+                                  } else if (!RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(value)) {
+                                    return 'Enter a valid email';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
+                            if (emailError != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  emailError!,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontFamily: 'Inter',
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       )
@@ -126,7 +161,6 @@ class _forgotPassword extends State<forgotPassword> {
                   ),
 
                   // Bottom Button
-
                   Container(
                     width: width,
                     child: Column(

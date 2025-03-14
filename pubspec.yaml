@@ -42,5 +42,11 @@ flutter:
     - assets/icons/hideIcon.svg
     - assets/icons/searchIcon.svg
     - assets/Images/Home/profile.png
+    - assets/Images/Home/Shoes/Shoes1.png
+    - assets/Images/Home/Shoes/Shoes2.png
+    - assets/Images/Home/Shoes/Shoes3.png
+    - assets/Images/Home/Shoes/Shoes4.png
+    - assets/Images/Home/Shoes/Shoes5.png
+    - assets/Images/Home/Shoes/Shoes6.png
 
   uses-material-design: true

@@ -7,7 +7,7 @@ import 'package:Hisabi/Home-Screen/homeScreen.dart';
 void main() async {
     runApp(
     GetMaterialApp(
-      home: SplashScreen(),
+      home: homeScreen(),
       debugShowCheckedModeBanner: false,
     ),
   );
