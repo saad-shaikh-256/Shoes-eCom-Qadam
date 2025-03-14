@@ -249,6 +249,9 @@ class _SignUpScreen extends State<Signupscreen> {
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Enter your phone number';
+                                  } else if (!RegExp(r'^[0-9]{10}$')
+                                      .hasMatch(value)) {
+                                    return 'Phone number must be 10 digits';
                                   }
                                   return null;
                                 },
@@ -315,6 +318,10 @@ class _SignUpScreen extends State<Signupscreen> {
                                     return 'Enter your password';
                                   } else if (value.length < 6) {
                                     return 'Password must be at least 6 characters';
+                                  } else if (!RegExp(
+                                      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$')
+                                      .hasMatch(value)) {
+                                    return 'Password must include uppercase, lowercase, and numbers';
                                   }
                                   return null;
                                 },
