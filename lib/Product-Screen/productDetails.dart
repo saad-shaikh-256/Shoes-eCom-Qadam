@@ -1,3 +1,4 @@
+import 'package:Hisabi/Product-Screen/cartScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -131,7 +132,12 @@ class _ProductDetailState extends State<productDetail> {
                         const SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
-                            print("Cart button clicked!");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => cartScreen(),
+                              ),
+                            );
                           },
                           child: Container(
                             height: 52,
