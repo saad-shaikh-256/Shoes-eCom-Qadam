@@ -1,3 +1,4 @@
+import 'package:Hisabi/Product-Screen/buyNow.dart';
 import 'package:Hisabi/Product-Screen/cartScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -116,7 +117,14 @@ class _ProductDetailState extends State<productDetail> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => buyNow(),
+                                  ),
+                                );
+                              },
                               child: Text(
                                 'Buy Now',
                                 style: TextStyle(

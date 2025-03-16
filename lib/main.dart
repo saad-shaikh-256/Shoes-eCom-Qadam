@@ -1,4 +1,5 @@
 import 'package:Hisabi/Home-Screen/homeScreen.dart';
+import 'package:Hisabi/Product-Screen/buyNow.dart';
 import 'package:Hisabi/Product-Screen/cartScreen.dart';
 import 'package:Hisabi/Product-Screen/productDetails.dart';
 import 'package:Hisabi/Splash-Screen/splashScreen.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 void main() async {
   runApp(
     GetMaterialApp(
-      home: SplashScreen(),
+      home: homeScreen( )  ,
       debugShowCheckedModeBanner: false,
     ),
   );

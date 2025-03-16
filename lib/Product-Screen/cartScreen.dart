@@ -1,3 +1,4 @@
+import 'package:Hisabi/Product-Screen/buyNow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -197,11 +198,16 @@ class cartScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  print('Continue clicked!');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => buyNow(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFF8D41), // Button color
-                  padding: EdgeInsets.symmetric(vertical: 16), // Button padding
+                  backgroundColor: Color(0xFFFF8D41),
+                  padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20), // Rounded corners
                   ),
