@@ -1,8 +1,8 @@
+import 'package:Hisabi/Home-Screen/homeScreen.dart';
 import 'package:Hisabi/Login-Screen/forgotPassword.dart';
 import 'package:Hisabi/Login-Screen/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Hisabi/Home-Screen/homeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -137,7 +137,7 @@ class _LoginScreen extends State<LoginScreen> {
                                   if (value!.isEmpty) {
                                     return 'Enter your email';
                                   } else if (!RegExp(
-                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                       .hasMatch(value)) {
                                     return 'Enter a valid email';
                                   }
@@ -196,15 +196,15 @@ class _LoginScreen extends State<LoginScreen> {
                                     },
                                     icon: isHidden
                                         ? SvgPicture.asset(
-                                      'assets/icons/viewIcon.svg',
-                                      width: 20.0,
-                                      height: 20.0,
-                                    )
+                                            'assets/icons/viewIcon.svg',
+                                            width: 20.0,
+                                            height: 20.0,
+                                          )
                                         : SvgPicture.asset(
-                                      'assets/icons/hideIcon.svg',
-                                      width: 20.0,
-                                      height: 20.0,
-                                    ),
+                                            'assets/icons/hideIcon.svg',
+                                            width: 20.0,
+                                            height: 20.0,
+                                          ),
                                   ),
                                   hintStyle: TextStyle(
                                     color: Color(0xff9E9E9E),
@@ -242,27 +242,28 @@ class _LoginScreen extends State<LoginScreen> {
                               ),
                             SizedBox(height: 8),
                             TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => forgotPassword()),
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      "Forgot Password?",
-                                      style: TextStyle(
-                                        color: Color(0xFFFF8D41),
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                      ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => forgotPassword()),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "Forgot Password?",
+                                    style: TextStyle(
+                                      color: Color(0xFFFF8D41),
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
                                     ),
-                                  ],
-                                ))
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       )
@@ -307,35 +308,36 @@ class _LoginScreen extends State<LoginScreen> {
                         ),
                         SizedBox(height: 20),
                         TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Signupscreen()),
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Don't have an account? ",
-                                  style: TextStyle(
-                                    color: Color(0xFF9E9E9E),
-                                    fontFamily: 'Inter',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Signupscreen()),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Don't have an account? ",
+                                style: TextStyle(
+                                  color: Color(0xFF9E9E9E),
+                                  fontFamily: 'Inter',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                Text(
-                                  "Sign up",
-                                  style: TextStyle(
-                                    color: Color(0xFFFF8D41),
-                                    fontFamily: 'Inter',
-                                    fontSize: 16,
-                                  ),
+                              ),
+                              Text(
+                                "Sign up",
+                                style: TextStyle(
+                                  color: Color(0xFFFF8D41),
+                                  fontFamily: 'Inter',
+                                  fontSize: 16,
                                 ),
-                              ],
-                            ))
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
