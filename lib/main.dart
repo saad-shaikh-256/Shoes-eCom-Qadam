@@ -1,4 +1,5 @@
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
+import 'package:Hisabi/Login-Screen/signupScreen.dart';
 import 'package:Hisabi/Splash-Screen/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +7,7 @@ import 'package:get/get.dart';
 void main() async {
   runApp(
     GetMaterialApp(
-      home: LoginScreen( )  ,
+      home: LoginScreen(),
       debugShowCheckedModeBanner: false,
     ),
   );

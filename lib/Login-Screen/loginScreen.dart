@@ -3,6 +3,8 @@ import 'package:Hisabi/Login-Screen/forgotPassword.dart';
 import 'package:Hisabi/Login-Screen/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Hisabi/db/db_helper.dart';
+import 'package:Hisabi/models/user_model.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -21,7 +23,33 @@ class _LoginScreen extends State<LoginScreen> {
   String? emailError;
   String? passwordError;
 
-  void submit() {
+  // void submit() {
+  //   setState(() {
+  //     emailError = null;
+  //     passwordError = null;
+  //   });
+  //
+  //   if (formKey.currentState?.validate() ?? false) {
+  //     String email = emailController.text.trim();
+  //     String password = passwordController.text.trim();
+  //
+  //     // Check if the email and password match the required credentials
+  //     if (email == "client@gmail.com" && password == "client") {
+  //       // Navigate to the home screen if credentials are correct
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => homeScreen()),
+  //       );
+  //     } else {
+  //       // Show an error message if credentials are incorrect
+  //       setState(() {
+  //         passwordError = "Invalid email or password";
+  //       });
+  //     }
+  //   }
+  // }
+
+  void submit() async {
     setState(() {
       emailError = null;
       passwordError = null;
@@ -31,21 +59,22 @@ class _LoginScreen extends State<LoginScreen> {
       String email = emailController.text.trim();
       String password = passwordController.text.trim();
 
-      // Check if the email and password match the required credentials
-      if (email == "client@gmail.com" && password == "client") {
-        // Navigate to the home screen if credentials are correct
+      final dbHelper = DatabaseHelper();
+      final user = await dbHelper.getUserByEmail(email);
+
+      if (user != null && user.password == password) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => homeScreen()),
         );
       } else {
-        // Show an error message if credentials are incorrect
         setState(() {
           passwordError = "Invalid email or password";
         });
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
