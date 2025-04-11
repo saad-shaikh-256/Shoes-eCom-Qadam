@@ -1,4 +1,6 @@
 import 'package:Hisabi/Product-Screen/productDetails.dart';
+import 'package:Hisabi/db/db_helper.dart';
+import 'package:Hisabi/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -10,74 +12,109 @@ class homeScreen extends StatefulWidget {
 }
 
 class homeScreenState extends State<homeScreen> {
+  String userName = 'User';
+  List<ProductModel> productList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // DatabaseHelper().deleteDatabaseForDebug();
+    loadUser();
+
+    loadProducts();
+  }
+
+  void loadUser() async {
+    final user = await DatabaseHelper.getLatestUser();
+    if (user != null) {
+      setState(() {
+        userName = user.name;
+      });
+    }
+  }
+
+  void loadProducts() async {
+    final products = await DatabaseHelper().getAllProducts();
+    if (products.isNotEmpty) {
+      print('Loaded ${products.length} products');
+    } else {
+      print('No products found');
+    }
+
+    setState(() {
+      productList = products;
+    });
+  }
+
   final List<String> categories = [
     'All',
     'Boots',
     'Formal Shoes',
     'Sports & Athletic Shoes'
   ];
-  final List<Map<String, dynamic>> products = [
-    {
-      'name': 'Nike Tiempo Legend',
-      'price': '₹ 4995.00',
-      'image': 'assets/Images/Home/Shoes/Shoes1.png'
-    },
-    {
-      'name': 'Nike Air-Max Dn Essential',
-      'price': '₹ 14995.00',
-      'image': 'assets/Images/Home/Shoes/Shoes2.png'
-    },
-    {
-      'name': 'Nike Air-Max-2013',
-      'price': '₹ 16995.00',
-      'image': 'assets/Images/Home/Shoes/Shoes3.png'
-    },
-    {
-      'name': 'Nike Air Zoom-Upturn-SC',
-      'price': '₹ 7895.00',
-      'image': 'assets/Images/Home/Shoes/Shoes4.png'
-    },
-    {
-      'name': 'Nike Elevate 3',
-      'price': '₹ 7095.00',
-      'image': 'assets/Images/Home/Shoes/Shoes5.png'
-    },
-    {
-      'name': 'Nike SB Dunk Low Pro',
-      'price': '₹ 9695.00',
-      'image': 'assets/Images/Home/Shoes/Shoes6.png'
-    },
-    {
-      'name': 'Nike Tiempo Legend',
-      'price': '₹ 4995.00',
-      'image': 'assets/Images/Home/Shoes/Shoes1.png'
-    },
-    {
-      'name': 'Nike Air-Max Dn Essential',
-      'price': '₹ 14995.00',
-      'image': 'assets/Images/Home/Shoes/Shoes2.png'
-    },
-    {
-      'name': 'Nike Air-Max-2013',
-      'price': '₹ 16995.00',
-      'image': 'assets/Images/Home/Shoes/Shoes3.png'
-    },
-    {
-      'name': 'Nike Air Zoom-Upturn-SC',
-      'price': '₹ 7895.00',
-      'image': 'assets/Images/Home/Shoes/Shoes4.png'
-    },
-    {
-      'name': 'Nike Elevate 3',
-      'price': '₹ 7095.00',
-      'image': 'assets/Images/Home/Shoes/Shoes5.png'
-    },
-    {
-      'name': 'Nike SB Dunk Low Pro',
-      'price': '₹ 9695.00',
-      'image': 'assets/Images/Home/Shoes/Shoes6.png'
-    },
-  ];
+
+  // final List<Map<String, dynamic>> products = [
+  //   {
+  //     'name': 'Nike Tiempo Legend',
+  //     'price': '₹ 4995.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes1.png'
+  //   },
+  //   {
+  //     'name': 'Nike Air-Max Dn Essential',
+  //     'price': '₹ 14995.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes2.png'
+  //   },
+  //   {
+  //     'name': 'Nike Air-Max-2013',
+  //     'price': '₹ 16995.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes3.png'
+  //   },
+  //   {
+  //     'name': 'Nike Air Zoom-Upturn-SC',
+  //     'price': '₹ 7895.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes4.png'
+  //   },
+  //   {
+  //     'name': 'Nike Elevate 3',
+  //     'price': '₹ 7095.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes5.png'
+  //   },
+  //   {
+  //     'name': 'Nike SB Dunk Low Pro',
+  //     'price': '₹ 9695.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes6.png'
+  //   },
+  //   {
+  //     'name': 'Nike Tiempo Legend',
+  //     'price': '₹ 4995.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes1.png'
+  //   },
+  //   {
+  //     'name': 'Nike Air-Max Dn Essential',
+  //     'price': '₹ 14995.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes2.png'
+  //   },
+  //   {
+  //     'name': 'Nike Air-Max-2013',
+  //     'price': '₹ 16995.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes3.png'
+  //   },
+  //   {
+  //     'name': 'Nike Air Zoom-Upturn-SC',
+  //     'price': '₹ 7895.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes4.png'
+  //   },
+  //   {
+  //     'name': 'Nike Elevate 3',
+  //     'price': '₹ 7095.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes5.png'
+  //   },
+  //   {
+  //     'name': 'Nike SB Dunk Low Pro',
+  //     'price': '₹ 9695.00',
+  //     'image': 'assets/Images/Home/Shoes/Shoes6.png'
+  //   },
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +139,7 @@ class homeScreenState extends State<homeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hi Saad Shaikh!!',
+                        'Hi $userName!!',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 12,
@@ -235,21 +272,22 @@ class homeScreenState extends State<homeScreen> {
                     childAspectRatio:
                         0.6, // Adjusted aspect ratio for more height
                   ),
-                  itemCount: products.length,
+                  itemCount: productList.length,
                   itemBuilder: (context, index) {
+                    final product = productList[index];
                     return GestureDetector(
                       onTap: () {
-                        // Navigate to the productDetail screen
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => productDetail(),
+                            builder: (context) =>
+                                productDetail(productId: product.id!),
                           ),
                         );
                       },
                       child: Card(
-                        color: Colors.transparent, // Remove background color
-                        elevation: 0, // Optional: Remove elevation if desired
+                        color: Colors.transparent,
+                        elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -258,15 +296,13 @@ class homeScreenState extends State<homeScreen> {
                           children: [
                             SizedBox(
                               height: 180,
-                              // Fixed height
                               width: double.infinity,
-                              // Ensure full width of the card
                               child: ClipRRect(
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(16),
                                 ),
                                 child: Image.asset(
-                                  products[index]['image'],
+                                  product.image,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -277,27 +313,24 @@ class homeScreenState extends State<homeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    products[index]['name'],
+                                    product.name,
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Color(0xFF9e9e9e),
                                     ),
-                                    maxLines: 1, // Limit text to a single line
-                                    overflow: TextOverflow
-                                        .ellipsis, // Truncate overflow
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    products[index]['price'],
+                                    product.price,
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Color(0xFF424242),
                                       fontWeight: FontWeight.bold,
                                     ),
                                     maxLines: 1,
-                                    // Limit price text to a single line
-                                    overflow: TextOverflow
-                                        .ellipsis, // Truncate overflow
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),

@@ -1,8 +1,9 @@
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
-import 'package:Hisabi/Login-Screen/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Hisabi/Home-Screen/homeScreen.dart';
+import 'package:Hisabi/db/db_helper.dart';
+import 'package:Hisabi/models/user_model.dart';
 
 class forgotPassword extends StatefulWidget {
   @override
@@ -13,28 +14,43 @@ class _forgotPassword extends State<forgotPassword> {
   bool isHidden = true;
   var formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-
   FocusNode emailFocusNode = FocusNode();
+  String? emailError;
 
-  String? emailError; // To store email validation error
-
-  void submit() {
+  void submit() async {
     setState(() {
-      emailError = null; // Clear previous email error
+      emailError = null;
     });
 
     if (formKey.currentState?.validate() ?? false) {
       String email = emailController.text.trim();
 
-      // Check if the email is "client@gmail.com"
-      if (email == "client@gmail.com") {
-        // Redirect to home screen if email is correct
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => homeScreen()),
+      bool exists = await DatabaseHelper.isEmailExist(email);
+
+      if (exists) {
+        // Show alert and redirect on OK
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Coming Soon"),
+              content: Text("Password reset feature is currently not available."),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the dialog
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
         );
       } else {
-        // Show error message if email is not found
         setState(() {
           emailError = "No email found";
         });
@@ -43,6 +59,8 @@ class _forgotPassword extends State<forgotPassword> {
       print("Data is Invalid");
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,14 +145,14 @@ class _forgotPassword extends State<forgotPassword> {
                                 ),
                                 onChanged: (value) {
                                   setState(() {
-                                    emailError = null; // Clear error on typing
+                                    emailError = null;
                                   });
                                 },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Enter your email';
                                   } else if (!RegExp(
-                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$")
                                       .hasMatch(value)) {
                                     return 'Enter a valid email';
                                   }
@@ -198,35 +216,36 @@ class _forgotPassword extends State<forgotPassword> {
                         ),
                         SizedBox(height: 20),
                         TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginScreen()),
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Back to ",
-                                  style: TextStyle(
-                                    color: Color(0xFF9E9E9E),
-                                    fontFamily: 'Inter',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Back to ",
+                                style: TextStyle(
+                                  color: Color(0xFF9E9E9E),
+                                  fontFamily: 'Inter',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                Text(
-                                  "Login",
-                                  style: TextStyle(
-                                    color: Color(0xFFFF8D41),
-                                    fontFamily: 'Inter',
-                                    fontSize: 16,
-                                  ),
+                              ),
+                              Text(
+                                "Login",
+                                style: TextStyle(
+                                  color: Color(0xFFFF8D41),
+                                  fontFamily: 'Inter',
+                                  fontSize: 16,
                                 ),
-                              ],
-                            ))
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),

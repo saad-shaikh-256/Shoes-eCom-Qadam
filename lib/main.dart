@@ -1,5 +1,5 @@
+import 'package:Hisabi/Home-Screen/homeScreen.dart';
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
-import 'package:Hisabi/Login-Screen/signupScreen.dart';
 import 'package:Hisabi/Splash-Screen/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,33 +1,64 @@
-import 'package:Hisabi/Product-Screen/buyNow.dart';
-import 'package:Hisabi/Product-Screen/cartScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Hisabi/Product-Screen/buyNow.dart';
+import 'package:Hisabi/Product-Screen/cartScreen.dart';
+import 'package:Hisabi/db/db_helper.dart';
+import 'package:Hisabi/models/product_model.dart';
 
 class productDetail extends StatefulWidget {
-  const productDetail({super.key});
+  final int productId;
+
+  const productDetail({super.key, required this.productId});
 
   @override
   State<productDetail> createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends State<productDetail> {
+  ProductModel? product;
+
+  @override
+  void initState() {
+    super.initState();
+    loadProducts();
+  }
+
+  void loadProducts() async {
+    final fetchedProduct =
+    await DatabaseHelper().getProductById(widget.productId);
+
+    if (fetchedProduct != null) {
+      setState(() {
+        product = fetchedProduct;
+      });
+    } else {
+      print("❌ Product not found with ID: ${widget.productId}");
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    if (product == null) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Image Section
-          Center(
-            child: Image.asset(
-              'assets/Images/Home/Shoes/Shoes2.png',
-              height: 398,
+          Container(
+            color: Color(0xFFF6F6F6),
+            child: Center(
+              child: Image.asset(
+                product!.image,
+                height: 398,
+              ),
             ),
           ),
-
-          // Content Section
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -35,13 +66,12 @@ class _ProductDetailState extends State<productDetail> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Content
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
                       Text(
-                        'Nike Air Max Dn Essential',
+                        product!.name,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -55,8 +85,7 @@ class _ProductDetailState extends State<productDetail> {
                           Icon(Icons.star, color: Color(0xFFE6A200), size: 14),
                           Icon(Icons.star, color: Color(0xFFE6A200), size: 14),
                           Icon(Icons.star, color: Color(0xFFE6A200), size: 14),
-                          Icon(Icons.star_half,
-                              color: Color(0xFFE6A200), size: 14),
+                          Icon(Icons.star_half, color: Color(0xFFE6A200), size: 14),
                           const SizedBox(width: 8),
                           Text(
                             '(10)',
@@ -70,7 +99,7 @@ class _ProductDetailState extends State<productDetail> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        "The Air Max Dn features our Dynamic Air unit system of dual-pressure tubes, creating a responsive sensation with every step. This results in a futuristic design that's comfortable enough to wear from day to night. Go ahead Feel The Unreal",
+                        product!.description,
                         style: const TextStyle(
                           fontSize: 13,
                           color: Color(0xFF757575),
@@ -80,7 +109,7 @@ class _ProductDetailState extends State<productDetail> {
                       Row(
                         children: [
                           Text(
-                            '₹ 14995.00',
+                            product!.price,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -89,7 +118,7 @@ class _ProductDetailState extends State<productDetail> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            '₹ 14995.00',
+                            product!.price,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -101,14 +130,12 @@ class _ProductDetailState extends State<productDetail> {
                       ),
                     ],
                   ),
-
-                  // Button Section
                   Padding(
                     padding: const EdgeInsets.only(bottom: 35),
                     child: Row(
                       children: [
                         Expanded(
-                          child: Container(
+                          child: SizedBox(
                             height: 52,
                             child: TextButton(
                               style: TextButton.styleFrom(
