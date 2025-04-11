@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 void main() async {
   runApp(
     GetMaterialApp(
-      home: LoginScreen(),
+      home: homeScreen(),
       debugShowCheckedModeBanner: false,
     ),
   );

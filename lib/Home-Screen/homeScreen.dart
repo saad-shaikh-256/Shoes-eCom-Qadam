@@ -14,6 +14,7 @@ class homeScreen extends StatefulWidget {
 class homeScreenState extends State<homeScreen> {
   String userName = 'User';
   List<ProductModel> productList = [];
+  String selectedCategory = 'All';
 
   @override
   void initState() {
@@ -34,17 +35,22 @@ class homeScreenState extends State<homeScreen> {
   }
 
   void loadProducts() async {
-    final products = await DatabaseHelper().getAllProducts();
-    if (products.isNotEmpty) {
-      print('Loaded ${products.length} products');
+    final allProducts = await DatabaseHelper().getAllProducts();
+    List<ProductModel> filteredProducts;
+
+    if (selectedCategory == 'All') {
+      filteredProducts = allProducts;
     } else {
-      print('No products found');
+      filteredProducts = allProducts
+          .where((product) => product.category == selectedCategory)
+          .toList();
     }
 
     setState(() {
-      productList = products;
+      productList = filteredProducts;
     });
   }
+
 
   final List<String> categories = [
     'All',
@@ -52,69 +58,6 @@ class homeScreenState extends State<homeScreen> {
     'Formal Shoes',
     'Sports & Athletic Shoes'
   ];
-
-  // final List<Map<String, dynamic>> products = [
-  //   {
-  //     'name': 'Nike Tiempo Legend',
-  //     'price': '₹ 4995.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes1.png'
-  //   },
-  //   {
-  //     'name': 'Nike Air-Max Dn Essential',
-  //     'price': '₹ 14995.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes2.png'
-  //   },
-  //   {
-  //     'name': 'Nike Air-Max-2013',
-  //     'price': '₹ 16995.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes3.png'
-  //   },
-  //   {
-  //     'name': 'Nike Air Zoom-Upturn-SC',
-  //     'price': '₹ 7895.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes4.png'
-  //   },
-  //   {
-  //     'name': 'Nike Elevate 3',
-  //     'price': '₹ 7095.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes5.png'
-  //   },
-  //   {
-  //     'name': 'Nike SB Dunk Low Pro',
-  //     'price': '₹ 9695.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes6.png'
-  //   },
-  //   {
-  //     'name': 'Nike Tiempo Legend',
-  //     'price': '₹ 4995.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes1.png'
-  //   },
-  //   {
-  //     'name': 'Nike Air-Max Dn Essential',
-  //     'price': '₹ 14995.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes2.png'
-  //   },
-  //   {
-  //     'name': 'Nike Air-Max-2013',
-  //     'price': '₹ 16995.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes3.png'
-  //   },
-  //   {
-  //     'name': 'Nike Air Zoom-Upturn-SC',
-  //     'price': '₹ 7895.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes4.png'
-  //   },
-  //   {
-  //     'name': 'Nike Elevate 3',
-  //     'price': '₹ 7095.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes5.png'
-  //   },
-  //   {
-  //     'name': 'Nike SB Dunk Low Pro',
-  //     'price': '₹ 9695.00',
-  //     'image': 'assets/Images/Home/Shoes/Shoes6.png'
-  //   },
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -237,29 +180,37 @@ class homeScreenState extends State<homeScreen> {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: Chip(
-                        label: Text(categories[index]),
-                        backgroundColor:
-                            index == 0 ? Color(0xFFFF8D41) : Colors.white,
-                        labelStyle: TextStyle(
-                          color: index == 0 ? Colors.white : Color(0xFF9E9E9E),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          // Rounded corners
-                          side: BorderSide(
-                            color: index == 0
-                                ? Colors.orange
-                                : Color(0xFFE0E0E0), // Border color
-                            width: 1, // Border width
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                      final isSelected = selectedCategory == category;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedCategory = category;
+                            });
+                            loadProducts();
+                          },
+                          child: Chip(
+                            label: Text(category),
+                            backgroundColor: isSelected ? Color(0xFFFF8D41) : Colors.white,
+                            labelStyle: TextStyle(
+                              color: isSelected ? Colors.white : Color(0xFF9E9E9E),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                color: isSelected ? Colors.orange : Color(0xFFE0E0E0),
+                                width: 1,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    }
+
                 ),
               ),
               const SizedBox(height: 20),
