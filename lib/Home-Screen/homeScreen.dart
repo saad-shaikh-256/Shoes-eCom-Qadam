@@ -1,4 +1,5 @@
 import 'package:Hisabi/Product-Screen/productDetails.dart';
+import 'package:Hisabi/Profile-Screen/profileScreen.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:Hisabi/models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -119,11 +120,21 @@ class homeScreenState extends State<homeScreen> {
                       ),
                     ],
                   ),
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundImage: AssetImage(
-                        'assets/Images/Home/profile.png'), // Replace with actual profile image
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserProfileScreen()),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 24,
+                      backgroundImage: AssetImage(
+                        'assets/Images/Home/profile.png',
+                      ),
+                    ),
                   ),
+
                 ],
               ),
               const SizedBox(height: 20),
