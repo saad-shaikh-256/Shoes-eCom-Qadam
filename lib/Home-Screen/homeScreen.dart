@@ -15,14 +15,25 @@ class homeScreenState extends State<homeScreen> {
   String userName = 'User';
   List<ProductModel> productList = [];
   String selectedCategory = 'All';
+  TextEditingController searchController = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
+    searchController.addListener(() {
+      loadProducts(query: searchController.text);
+    });
     // DatabaseHelper().deleteDatabaseForDebug();
     loadUser();
 
     loadProducts();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   void loadUser() async {
@@ -34,10 +45,11 @@ class homeScreenState extends State<homeScreen> {
     }
   }
 
-  void loadProducts() async {
+  void loadProducts({String? query}) async {
     final allProducts = await DatabaseHelper().getAllProducts();
     List<ProductModel> filteredProducts;
 
+    // Filter by category first
     if (selectedCategory == 'All') {
       filteredProducts = allProducts;
     } else {
@@ -46,10 +58,18 @@ class homeScreenState extends State<homeScreen> {
           .toList();
     }
 
+    // Then filter by search query if provided
+    if (query != null && query.isNotEmpty) {
+      filteredProducts = filteredProducts
+          .where((product) => product.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+
     setState(() {
       productList = filteredProducts;
     });
   }
+
 
 
   final List<String> categories = [
@@ -113,6 +133,7 @@ class homeScreenState extends State<homeScreen> {
                     child: Container(
                       height: 52,
                       child: TextFormField(
+                        controller: searchController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
