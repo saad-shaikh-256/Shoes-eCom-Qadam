@@ -4,6 +4,7 @@ import 'package:Hisabi/db/db_helper.dart';
 import 'package:Hisabi/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Hisabi/Product-Screen/productDetails.dart';
 
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
@@ -25,7 +26,7 @@ class homeScreenState extends State<homeScreen> {
     searchController.addListener(() {
       loadProducts(query: searchController.text);
     });
-    DatabaseHelper().deleteDatabaseForDebug();
+    // DatabaseHelper().deleteDatabaseForDebug();
     loadUser();
 
     loadProducts();
@@ -271,8 +272,7 @@ class homeScreenState extends State<homeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                productDetail(productId: product.id!),
+                            builder: (context) => ProductDetail(productId: product.id!), // Ensure the 'product.id!' is non-null
                           ),
                         );
                       },

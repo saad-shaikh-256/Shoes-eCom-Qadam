@@ -1,3 +1,4 @@
+import 'package:Hisabi/models/order_model.dart';
 import 'package:Hisabi/models/product_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -23,7 +24,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'hisabi.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
         CREATE TABLE users(
@@ -43,6 +44,21 @@ class DatabaseHelper {
           description TEXT,
           image TEXT,
           category TEXT
+        )
+      ''');
+
+        // Create Orders Table
+        await db.execute('''
+        CREATE TABLE orders(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        product_id INTEGER,
+        quantity INTEGER,
+        status TEXT,
+        order_date TEXT,
+        address TEXT,
+        FOREIGN KEY(user_id) REFERENCES users(id),
+        FOREIGN KEY(product_id) REFERENCES products(id)
         )
       ''');
 
@@ -109,6 +125,17 @@ class DatabaseHelper {
           await db.insert('products', product.toMap());
         }
       },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 3) {
+          // Add new columns
+          await db.execute('''
+          ALTER TABLE orders ADD COLUMN product_name TEXT;
+        ''');
+          await db.execute('''
+          ALTER TABLE orders ADD COLUMN product_image TEXT;
+        ''');
+        }
+      },
     );
   }
 
@@ -132,14 +159,11 @@ class DatabaseHelper {
 
   Future<UserModel?> getCurrentUser() async {
     final db = await database;
-
-    // Fetch the most recently added user (like how your getLatestUser() works)
     final List<Map<String, dynamic>> result = await db.query(
       'users',
       orderBy: 'id DESC',
       limit: 1,
     );
-
     if (result.isNotEmpty) {
       return UserModel.fromMap(result.first);
     } else {
@@ -224,5 +248,53 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'hisabi.db');
     await deleteDatabase(path);
     print("Database deleted for reset");
+  }
+
+  // Insert new order
+  Future<int> insertOrder({
+    required int userId,
+    required int productId,
+    int quantity = 1,
+  }) async {
+    final db = await database;
+    final now = DateTime.now().toIso8601String();
+    return await db.insert('orders', {
+      'user_id': userId,
+      'product_id': productId,
+      'quantity': quantity,
+      'status': 'In Cart',
+      'order_date': now,
+      'address': '',
+    });
+  }
+
+// Fetch orders with product info
+  Future<List<OrderModel>> getOrdersByUser(int userId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery('''
+    SELECT o.*, p.name, p.image, p.price
+    FROM orders o
+    JOIN products p ON o.product_id = p.id
+    WHERE o.user_id = ?
+  ''', [userId]);
+
+    return results.map((map) => OrderModel.fromJoinedMap(map)).toList();
+  }
+
+// Update quantity
+  Future<int> updateOrderQuantity(int orderId, int quantity) async {
+    final db = await database;
+    return await db.update(
+      'orders',
+      {'quantity': quantity},
+      where: 'id = ?',
+      whereArgs: [orderId],
+    );
+  }
+
+// Delete order
+  Future<int> deleteOrder(int orderId) async {
+    final db = await database;
+    return await db.delete('orders', where: 'id = ?', whereArgs: [orderId]);
   }
 }

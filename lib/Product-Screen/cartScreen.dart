@@ -1,37 +1,76 @@
-import 'package:Hisabi/Product-Screen/buyNow.dart';
+// lib/Product-Screen/cartScreen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Hisabi/models/order_model.dart';
+import 'package:Hisabi/db/db_helper.dart';
+import 'buyNow.dart'; // Import your buyNow screen
 
-class cartScreen extends StatelessWidget {
-  // Sample product data
-  final List<Map<String, dynamic>> products = [
-    {
-      'name': 'Nike Tiempo Legend',
-      'price': '₹ 4995.00',
-      'image': 'assets/Images/Home/Shoes/Shoes1.png',
-      'quantity': 1,
-    },
-    {
-      'name': 'Nike Air-Max Dn Essential',
-      'price': '₹ 14995.00',
-      'quantity': 1,
-      'image': 'assets/Images/Home/Shoes/Shoes2.png'
-    },
-    {
-      'name': 'Nike Air-Max-2013',
-      'price': '₹ 16995.00',
-      'quantity': 1,
-      'image': 'assets/Images/Home/Shoes/Shoes3.png'
-    },
-  ];
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  List<OrderModel> cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCartItems();
+  }
+
+  // Fetch cart items from the database
+  Future<void> _loadCartItems() async {
+    final currentUser = await DatabaseHelper().getCurrentUser();
+    if (currentUser != null) {
+      final items = await DatabaseHelper().getOrdersByUser(currentUser.id!);
+      setState(() {
+        cartItems = items;
+      });
+    }
+  }
+
+  // Function to increase the quantity of a product in the cart
+  Future<void> _increaseQuantity(int orderId) async {
+    final order = cartItems.firstWhere((item) => item.id == orderId);
+    if (order.quantity < 10) {  // Limit quantity increase to 10
+      order.quantity++;
+      final result = await DatabaseHelper().updateOrderQuantity(order.id!, order.quantity);
+      if (result > 0) {
+        _loadCartItems(); // Refresh cart
+      }
+    }
+  }
+
+  // Function to decrease the quantity of a product in the cart
+  Future<void> _decreaseQuantity(int orderId) async {
+    final order = cartItems.firstWhere((item) => item.id == orderId);
+    if (order.quantity > 1) {  // Ensure quantity does not go below 1
+      order.quantity--;
+      final result = await DatabaseHelper().updateOrderQuantity(order.id!, order.quantity);
+      if (result > 0) {
+        _loadCartItems(); // Refresh cart
+      }
+    }
+  }
+
+  // Function to remove a product from the cart
+  Future<void> _removeItem(int orderId) async {
+    final result = await DatabaseHelper().deleteOrder(orderId);
+    if (result > 0) {
+      _loadCartItems(); // Refresh cart
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5), // Set the entire background color
+      backgroundColor: Color(0xFFF5F5F5),
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(top: 20), //20px padding for icon
+          padding: const EdgeInsets.only(top: 20),
           child: IconButton(
             icon: SvgPicture.asset(
               'assets/icons/backIcon.svg',
@@ -39,12 +78,12 @@ class cartScreen extends StatelessWidget {
               height: 24,
             ),
             onPressed: () {
-              Navigator.pop(context); // Go back to the previous screen
+              Navigator.pop(context);
             },
           ),
         ),
         title: Padding(
-          padding: const EdgeInsets.only(top: 20), // 20px padding for title
+          padding: const EdgeInsets.only(top: 20),
           child: Text(
             'Cart Details',
             style: TextStyle(
@@ -57,21 +96,23 @@ class cartScreen extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Color(0xFFF5F5F5),
-        toolbarHeight: 100, // Increase the toolbar height to fit padding
+        toolbarHeight: 100,
       ),
-      body: Column(
+      body: cartItems.isEmpty
+          ? Center(child: Text('Your cart is empty!'))
+          : Column(
         children: [
-          // Product List
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              itemCount: products.length,
+              itemCount: cartItems.length,
               itemBuilder: (context, index) {
+                final order = cartItems[index];
                 return Column(
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
@@ -86,7 +127,7 @@ class cartScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               image: DecorationImage(
-                                image: AssetImage(products[index]['image']),
+                                image: AssetImage(order.productImage),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -98,7 +139,7 @@ class cartScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  products[index]['name'],
+                                  order.productName,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Inter',
@@ -108,7 +149,7 @@ class cartScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  products[index]['price'],
+                                  '₹ ${order.price}',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Inter',
@@ -119,23 +160,18 @@ class cartScreen extends StatelessWidget {
                                 SizedBox(height: 8),
                                 Row(
                                   children: [
-                                    Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFF5F5F5),
-                                        borderRadius: BorderRadius.circular(8),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.remove,
+                                        size: 14,
+                                        color: Color(0xFF757575),
                                       ),
-                                      child: IconButton(
-                                        icon: Icon(Icons.remove,
-                                            size: 14, color: Color(0xFF757575)),
-                                        onPressed: () {},
-                                        padding: EdgeInsets.zero,
-                                      ),
+                                      onPressed: () =>
+                                          _decreaseQuantity(order.id!),
                                     ),
                                     SizedBox(width: 8),
                                     Text(
-                                      products[index]['quantity'].toString(),
+                                      order.quantity.toString(),
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
@@ -143,44 +179,27 @@ class cartScreen extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(width: 8),
-                                    Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: BoxDecoration(
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.add,
+                                        size: 14,
                                         color: Color(0xFFFF8D41),
-                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.add,
-                                          size: 14,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {},
-                                        padding: EdgeInsets.zero,
-                                      ),
+                                      onPressed: () =>
+                                          _increaseQuantity(order.id!),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF5F5F5),
-                              borderRadius: BorderRadius.circular(8),
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete_outline_rounded,
+                              size: 24,
+                              color: Color(0xFF757575),
                             ),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.delete_outline_rounded,
-                                size: 14,
-                                color: Color(0xFF757575),
-                              ),
-                              onPressed: () {},
-                              padding: EdgeInsets.zero,
-                            ),
+                            onPressed: () => _removeItem(order.id!),
                           ),
                         ],
                       ),
@@ -191,32 +210,31 @@ class cartScreen extends StatelessWidget {
               },
             ),
           ),
-
           Container(
             padding: EdgeInsets.all(16),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => buyNow(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => buyNow(cartItems: cartItems),
+                  //   ),
+                  // );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF8D41),
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // Rounded corners
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
                   'Continue',
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),

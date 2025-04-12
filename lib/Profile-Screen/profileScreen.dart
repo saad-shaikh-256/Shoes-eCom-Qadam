@@ -214,11 +214,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: ElevatedButton(
                 onPressed: () => _showDeleteDialog(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: Color(0xFFFF8D41),
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(color: Colors.red, width: 1),
+                    side: BorderSide(color: Color(0xFFFF8D41), width: 1),
                   ),
                 ),
                 child: Text(
@@ -226,7 +226,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.red,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -328,6 +328,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (context) => LoginScreen(
+                        message: 'Account deleted successfully',
                       ),
                     ),
                     (route) => false,
