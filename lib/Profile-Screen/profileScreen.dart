@@ -1,6 +1,8 @@
+import 'package:Hisabi/Login-Screen/loginScreen.dart';
+import 'package:Hisabi/db/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Hisabi/db/db_helper.dart';
+
 import '../models/user_model.dart';
 import './editProfile.dart';
 
@@ -79,7 +81,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     children: [
                       CircleAvatar(
                         radius: 40,
-                        backgroundImage: AssetImage('assets/Images/Home/profile.png'),
+                        backgroundImage:
+                            AssetImage('assets/Images/Home/profile.png'),
                       ),
                       SizedBox(width: 16),
                       Column(
@@ -127,12 +130,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      final currentUser = await DatabaseHelper().getCurrentUser();
+                      final currentUser =
+                          await DatabaseHelper().getCurrentUser();
                       if (currentUser != null) {
                         final updatedUser = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EditProfileScreen(currentUser: currentUser),
+                            builder: (context) =>
+                                EditProfileScreen(currentUser: currentUser),
                           ),
                         );
 
@@ -310,17 +315,32 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Account deleted successfully'),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              );
+            onPressed: () async {
+              Navigator.pop(context); // Close the dialog
+
+              final currentUser = await DatabaseHelper().getCurrentUser();
+              if (currentUser != null) {
+                final result =
+                    await DatabaseHelper().deleteUser(currentUser.id!);
+
+                if (result > 0 && mounted) {
+                  // Navigate to LoginScreen with message
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(
+                      ),
+                    ),
+                    (route) => false,
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to delete account'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
             },
             child: Text(
               'Delete',

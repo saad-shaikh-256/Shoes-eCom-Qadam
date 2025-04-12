@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
+  final String? message;
+  const LoginScreen({Key? key, this.message}) : super(key: key);
+
   @override
   _LoginScreen createState() => _LoginScreen();
 }
@@ -15,6 +18,24 @@ class _LoginScreen extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.message != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(widget.message!),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        );
+      });
+    }
+  }
 
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
@@ -53,6 +74,7 @@ class _LoginScreen extends State<LoginScreen> {
     final Size size = MediaQuery.sizeOf(context);
     final double width = size.width;
     final double height = size.height;
+
 
     return Scaffold(
       body: SingleChildScrollView(

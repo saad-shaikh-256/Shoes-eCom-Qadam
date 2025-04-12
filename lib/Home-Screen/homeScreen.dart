@@ -25,7 +25,7 @@ class homeScreenState extends State<homeScreen> {
     searchController.addListener(() {
       loadProducts(query: searchController.text);
     });
-    // DatabaseHelper().deleteDatabaseForDebug();
+    DatabaseHelper().deleteDatabaseForDebug();
     loadUser();
 
     loadProducts();
