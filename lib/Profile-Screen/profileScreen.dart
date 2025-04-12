@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Hisabi/db/db_helper.dart';
+import '../models/user_model.dart';
+import './editProfile.dart';
 
 class UserProfileScreen extends StatefulWidget {
   @override
@@ -7,139 +10,229 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final String fullName = "Saad Shaikh";
-  final String email = "saad.shaikh@example.com";
+  String fullName = "Loading...";
+  String email = "Loading...";
+  int orderCount = 5;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    UserModel? user = await DatabaseHelper().getCurrentUser();
+    if (user != null) {
+      setState(() {
+        fullName = user.name ?? "No Name";
+        email = user.email ?? "No Email";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final double width = size.width;
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Container(
-          width: width,
-          padding: EdgeInsetsDirectional.fromSTEB(24, 60, 24, 35),
-          child: Column(
-            children: [
-              // Header with Back Button
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: SvgPicture.asset(
-                      'assets/icons/back_arrow.svg',
-                      width: 24,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    'My Profile',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 32),
-
-              // Profile Card
-              Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFAFAFA),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: AssetImage('assets/Images/Home/profile.png'),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      fullName,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF9E9E9E),
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24),
-
-              // Profile Options
-              _buildOptionTile(
-                icon: 'assets/icons/edit_profile.svg',
-                title: 'Edit Profile',
-                onTap: () {
-                  // Navigate to edit profile
-                },
-              ),
-              _buildOptionTile(
-                icon: 'assets/icons/cart.svg',
-                title: 'Cart',
-                onTap: () {
-                  // Navigate to cart
-                },
-              ),
-              _buildOptionTile(
-                icon: 'assets/icons/order_history.svg',
-                title: 'Order History',
-                onTap: () {
-                  // Navigate to order history
-                },
-              ),
-              SizedBox(height: 40),
-
-              // Delete Account Button
-              Container(
-                height: 54,
-                width: width,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.red, width: 1),
-                    ),
-                  ),
-                  onPressed: _showDeleteConfirmation,
-                  child: Text(
-                    'Delete Account',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.red,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+      backgroundColor: Color(0xFFF5F5F5),
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: IconButton(
+            icon: SvgPicture.asset(
+              'assets/icons/backIcon.svg',
+              width: 24,
+              height: 24,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
         ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Text(
+            'My Profile',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF424242),
+            ),
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Color(0xFFF5F5F5),
+        toolbarHeight: 100,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              children: [
+                // Profile Card
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundImage: AssetImage('assets/Images/Home/profile.png'),
+                      ),
+                      SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            fullName,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF616161),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            email,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF9E9E9E),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+
+                // Profile Options
+                Container(
+                  height: 56,
+                  margin: EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final currentUser = await DatabaseHelper().getCurrentUser();
+                      if (currentUser != null) {
+                        final updatedUser = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditProfileScreen(currentUser: currentUser),
+                          ),
+                        );
+
+                        if (updatedUser != null && mounted) {
+                          setState(() {
+                            fullName = updatedUser.name;
+                            email = updatedUser.email;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Profile updated successfully'),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          );
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Failed to load user data'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/userIcon.svg',
+                          width: 24,
+                          color: Color(0xFFFF8D41),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            'Edit Profile',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF616161),
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Color(0xFF9E9E9E),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                _buildProfileOption(
+                  icon: 'assets/icons/cartIcon.svg',
+                  title: 'Cart',
+                  onTap: () {},
+                ),
+                _buildProfileOption(
+                  icon: 'assets/icons/orderIcon.svg',
+                  title: 'Order History ($orderCount)',
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+
+          // Delete Account Button
+          Container(
+            padding: EdgeInsets.all(16),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => _showDeleteDialog(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(color: Colors.red, width: 1),
+                  ),
+                ),
+                child: Text(
+                  'Delete Account',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildOptionTile({
+  Widget _buildProfileOption({
     required String icon,
     required String title,
     required VoidCallback onTap,
@@ -147,40 +240,44 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Column(
       children: [
         Container(
-          height: 56,
-          child: ListTile(
-            leading: SvgPicture.asset(
-              icon,
-              width: 24,
-              color: Color(0xFFFF8D41),
-            ),
-            title: Text(
-              title,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                color: Colors.black87,
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                icon,
+                width: 24,
+                height: 24,
+                color: Color(0xFFFF8D41),
               ),
-            ),
-            trailing: SvgPicture.asset(
-              'assets/icons/forward_arrow.svg',
-              width: 16,
-              color: Color(0xFF9E9E9E),
-            ),
-            onTap: onTap,
+              SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF616161),
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: Color(0xFF9E9E9E),
+              ),
+            ],
           ),
         ),
-        Divider(
-          height: 1,
-          color: Color(0xFFEEEEEE),
-          thickness: 1,
-        ),
+        SizedBox(height: 16),
       ],
     );
   }
 
-  void _showDeleteConfirmation() {
+  void _showDeleteDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -195,10 +292,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
         content: Text(
-          'This will permanently delete your account and all data.',
+          'Are you sure you want to delete your account permanently?',
           style: TextStyle(
             fontFamily: 'Inter',
-            color: Color(0xFF9E9E9E),
+            color: Color(0xFF616161),
           ),
         ),
         actions: [
@@ -214,7 +311,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           TextButton(
             onPressed: () {
-              // Handle account deletion
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

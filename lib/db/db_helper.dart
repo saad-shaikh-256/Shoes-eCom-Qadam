@@ -89,6 +89,20 @@ class DatabaseHelper {
                   "You can always count on a classic. The Nike SB Dunk Low pairs iconic colour-blocking with premium materials and plush padding for game-changing comfort that lasts. The possibilities are endless—how will you wear your Dunks?  ",
               image: 'assets/Images/Home/Shoes/Shoes6.png',
               category: 'Boots'),
+          ProductModel(
+              name: "Nike Air Force 1 '07",
+              price: '₹ 9695.00',
+              description:
+                  "Comfortable, durable and timeless—it's number 1 for a reason. The '80s construction pairs with classic colours for style that tracks whether you're on court or on the go. ",
+              image: 'assets/Images/Home/Shoes/Shoes7.png',
+              category: 'Formal Shoes'),
+          ProductModel(
+              name: "Nike ReactX Rejuven8",
+              price: '₹  4695.00',
+              description:
+                  "Give your feet a rest. Made from soft and responsive ReactX foam, the Rejuven8 uses some of our best tech to create recovery slides you'll look forward to wearing.",
+              image: 'assets/Images/Home/Shoes/Shoes8.png',
+              category: 'Casual'),
         ];
 
         for (var product in sampleProducts) {
@@ -114,6 +128,23 @@ class DatabaseHelper {
       return UserModel.fromMap(maps.first);
     }
     return null;
+  }
+
+  Future<UserModel?> getCurrentUser() async {
+    final db = await database;
+
+    // Fetch the most recently added user (like how your getLatestUser() works)
+    final List<Map<String, dynamic>> result = await db.query(
+      'users',
+      orderBy: 'id DESC',
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      return UserModel.fromMap(result.first);
+    } else {
+      return null;
+    }
   }
 
   static Future<bool> isEmailExist(String email) async {

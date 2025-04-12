@@ -51,5 +51,7 @@ flutter:
     - assets/Images/Home/Shoes/Shoes4.png
     - assets/Images/Home/Shoes/Shoes5.png
     - assets/Images/Home/Shoes/Shoes6.png
+    - assets/Images/Home/Shoes/Shoes7.png
+    - assets/Images/Home/Shoes/Shoes8.png
 
   uses-material-design: true

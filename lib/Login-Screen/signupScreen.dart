@@ -26,53 +26,6 @@ class _SignUpScreen extends State<Signupscreen> {
 
   String? emailError;
 
-  // void submit() async {
-  //   setState(() {
-  //     emailError = null;
-  //   });
-  //
-  //   if (formKey.currentState?.validate() ?? false) {
-  //     String name = nameController.text.trim();
-  //     String email = emailController.text.trim();
-  //     String phone = phoneController.text.trim();
-  //     String password = passwordController.text.trim();
-  //
-  //     // Check if user exists
-  //     UserModel? existingUser = await dbHelper.getUserByEmail(email);
-  //     if (existingUser != null) {
-  //       setState(() {
-  //         emailError = "User already registered with this email";
-  //       });
-  //       return;
-  //     }
-  //
-  //     // Insert user
-  //     UserModel newUser = UserModel(
-  //       name: name,
-  //       email: email,
-  //       phone: phone,
-  //       password: password,
-  //     );
-  //
-  //     await dbHelper.insertUser(newUser);
-  //
-  //     // Show success message
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Account created successfully! Please login.')),
-  //     );
-  //
-  //     // Navigate after short delay
-  //     Future.delayed(Duration(seconds: 1), () {
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => LoginScreen()),
-  //       );
-  //     });
-  //   } else {
-  //     print("Data is Invalid");
-  //   }
-  // }
-
   void submit() async {
     setState(() {
       emailError = null;

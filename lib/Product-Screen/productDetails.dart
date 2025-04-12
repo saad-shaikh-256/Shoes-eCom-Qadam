@@ -108,6 +108,7 @@ class _ProductDetailState extends State<productDetail> {
                       const SizedBox(height: 16),
                       Row(
                         children: [
+                          // Actual Price
                           Text(
                             product!.price,
                             style: const TextStyle(
@@ -117,17 +118,32 @@ class _ProductDetailState extends State<productDetail> {
                             ),
                           ),
                           const SizedBox(width: 8),
+
+                          // Inflated Price (strike-through)
                           Text(
-                            product!.price,
+                            '₹${(double.parse(product!.price.replaceAll('₹', '')) * 1.2).toStringAsFixed(0)}',
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFFFF4C51),
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
+
+                          const SizedBox(width: 8),
+
+                          // Discount Percentage
+                          Text(
+                            '-20%',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF43A047), // Green color for discount
+                            ),
+                          ),
                         ],
                       ),
+
                     ],
                   ),
                   Padding(

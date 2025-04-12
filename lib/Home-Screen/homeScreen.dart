@@ -62,7 +62,8 @@ class homeScreenState extends State<homeScreen> {
     // Then filter by search query if provided
     if (query != null && query.isNotEmpty) {
       filteredProducts = filteredProducts
-          .where((product) => product.name.toLowerCase().contains(query.toLowerCase()))
+          .where((product) =>
+          product.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
 
@@ -72,9 +73,9 @@ class homeScreenState extends State<homeScreen> {
   }
 
 
-
   final List<String> categories = [
     'All',
+    'Casual',
     'Boots',
     'Formal Shoes',
     'Sports & Athletic Shoes'
@@ -82,7 +83,9 @@ class homeScreenState extends State<homeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery
+        .of(context)
+        .size;
     final double width = size.width;
     final double height = size.height;
 
@@ -124,7 +127,8 @@ class homeScreenState extends State<homeScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UserProfileScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => UserProfileScreen()),
                       );
                     },
                     child: CircleAvatar(
@@ -210,8 +214,8 @@ class homeScreenState extends State<homeScreen> {
               SizedBox(
                 height: 40,
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categories.length,
                     itemBuilder: (context, index) {
                       final category = categories[index];
                       final isSelected = selectedCategory == category;
@@ -227,14 +231,18 @@ class homeScreenState extends State<homeScreen> {
                           },
                           child: Chip(
                             label: Text(category),
-                            backgroundColor: isSelected ? Color(0xFFFF8D41) : Colors.white,
+                            backgroundColor: isSelected
+                                ? Color(0xFFFF8D41)
+                                : Colors.white,
                             labelStyle: TextStyle(
-                              color: isSelected ? Colors.white : Color(0xFF9E9E9E),
+                              color: isSelected ? Colors.white : Color(
+                                  0xFF9E9E9E),
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(
-                                color: isSelected ? Colors.orange : Color(0xFFE0E0E0),
+                                color: isSelected ? Colors.orange : Color(
+                                    0xFFE0E0E0),
                                 width: 1,
                               ),
                             ),
@@ -253,7 +261,7 @@ class homeScreenState extends State<homeScreen> {
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                     childAspectRatio:
-                        0.6, // Adjusted aspect ratio for more height
+                    0.6, // Adjusted aspect ratio for more height
                   ),
                   itemCount: productList.length,
                   itemBuilder: (context, index) {
