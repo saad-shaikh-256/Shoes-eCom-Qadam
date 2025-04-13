@@ -44,6 +44,8 @@ flutter:
     - assets/icons/cartIcon.svg
     - assets/icons/searchIcon.svg
     - assets/icons/backIcon.svg
+    - assets/icons/orderIcon.svg
+    - assets/icons/locationIcon.svg
     - assets/Images/Home/profile.png
     - assets/Images/Home/Shoes/Shoes1.png
     - assets/Images/Home/Shoes/Shoes2.png

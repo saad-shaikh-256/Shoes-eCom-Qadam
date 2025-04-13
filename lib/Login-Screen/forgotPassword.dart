@@ -1,9 +1,7 @@
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
+import 'package:Hisabi/db/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Hisabi/Home-Screen/homeScreen.dart';
-import 'package:Hisabi/db/db_helper.dart';
-import 'package:Hisabi/models/user_model.dart';
 
 class forgotPassword extends StatefulWidget {
   @override
@@ -28,13 +26,13 @@ class _forgotPassword extends State<forgotPassword> {
       bool exists = await DatabaseHelper.isEmailExist(email);
 
       if (exists) {
-        // Show alert and redirect on OK
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               title: Text("Coming Soon"),
-              content: Text("Password reset feature is currently not available."),
+              content:
+                  Text("Password reset feature is currently not available."),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -59,8 +57,6 @@ class _forgotPassword extends State<forgotPassword> {
       print("Data is Invalid");
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +148,7 @@ class _forgotPassword extends State<forgotPassword> {
                                   if (value!.isEmpty) {
                                     return 'Enter your email';
                                   } else if (!RegExp(
-                                      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$")
+                                          r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$")
                                       .hasMatch(value)) {
                                     return 'Enter a valid email';
                                   }

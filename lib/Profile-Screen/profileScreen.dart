@@ -1,5 +1,6 @@
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
 import 'package:Hisabi/Product-Screen/cartScreen.dart';
+import 'package:Hisabi/Profile-Screen/orderHistory.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +17,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   String fullName = "Loading...";
   String email = "Loading...";
   int orderCount = 5;
+  UserModel? currentUser;
 
   @override
   void initState() {
@@ -25,10 +27,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Future<void> _loadUserData() async {
     UserModel? user = await DatabaseHelper().getCurrentUser();
+
     if (user != null) {
+      int count = await DatabaseHelper().getOrderCountByUserId(user.id!);
       setState(() {
+        currentUser = user;
         fullName = user.name ?? "No Name";
         email = user.email ?? "No Email";
+        orderCount = count;
       });
     }
   }
@@ -241,11 +247,56 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
 
-                _buildProfileOption(
-                  icon: 'assets/icons/orderIcon.svg',
-                  title: 'Order History ($orderCount)',
-                  onTap: () {},
+                Container(
+                  height: 56,
+                  margin: EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderHistoryScreen(userId: currentUser!.id!), // Replace with your user model's id
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/orderIcon.svg',
+                          width: 24,
+                          color: Color(0xFFFF8D41),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            'Order History ($orderCount)',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF616161),
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Color(0xFF9E9E9E),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+
               ],
             ),
           ),

@@ -279,6 +279,7 @@ class DatabaseHelper {
     } else {
       // New product in cart -> insert new row
       final now = DateTime.now().toIso8601String();
+
       return await db.insert('orders', {
         'user_id': userId,
         'product_id': productId,
@@ -289,7 +290,6 @@ class DatabaseHelper {
       });
     }
   }
-
 
 // Fetch orders with product info
   Future<List<OrderModel>> getOrdersByUser(int userId) async {
@@ -316,9 +316,26 @@ class DatabaseHelper {
     );
   }
 
+  Future<int> updateOrder(OrderModel order) async {
+    final db = await database;
+    return await db.update(
+      'orders',
+      order.toMap(),
+      where: 'id = ?',
+      whereArgs: [order.id],
+    );
+  }
+
 // Delete order
   Future<int> deleteOrder(int orderId) async {
     final db = await database;
     return await db.delete('orders', where: 'id = ?', whereArgs: [orderId]);
+  }
+
+  Future<int> getOrderCountByUserId(int userId) async {
+    final db = await database;
+    var result = await db
+        .rawQuery('SELECT COUNT(*) FROM orders WHERE user_id = ?', [userId]);
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 }

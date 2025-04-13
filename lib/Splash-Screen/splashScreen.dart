@@ -1,4 +1,4 @@
-import 'package:Hisabi/Splash-Screen/startupScreen.dart'; // Import the target screen after splash
+import 'package:Hisabi/Splash-Screen/startupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

@@ -1,5 +1,4 @@
 import 'package:Hisabi/Home-Screen/homeScreen.dart';
-import 'package:Hisabi/Product-Screen/buyNow.dart';
 import 'package:Hisabi/Splash-Screen/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +9,7 @@ void main() async {
   // await DatabaseHelper().deleteDatabaseForDebug();
   runApp(
     GetMaterialApp(
-      home: homeScreen(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     ),
   );

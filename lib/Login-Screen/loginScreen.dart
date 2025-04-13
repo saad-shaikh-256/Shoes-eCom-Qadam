@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
   final String? message;
+
   const LoginScreen({Key? key, this.message}) : super(key: key);
 
   @override
@@ -75,7 +76,6 @@ class _LoginScreen extends State<LoginScreen> {
     final double width = size.width;
     final double height = size.height;
 
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -115,7 +115,6 @@ class _LoginScreen extends State<LoginScreen> {
                         key: formKey,
                         child: Column(
                           children: [
-                            // Email Input Field
                             Container(
                               height: 52,
                               width: width,
@@ -181,8 +180,6 @@ class _LoginScreen extends State<LoginScreen> {
                                 ),
                               ),
                             SizedBox(height: 20),
-
-                            // Password Input Field
                             Container(
                               height: 52,
                               width: width,
@@ -292,8 +289,6 @@ class _LoginScreen extends State<LoginScreen> {
                       )
                     ],
                   ),
-
-                  // Bottom Button
                   Container(
                     width: width,
                     child: Column(
