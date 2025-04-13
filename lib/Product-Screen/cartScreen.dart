@@ -1,4 +1,5 @@
 // lib/Product-Screen/cartScreen.dart
+import 'package:Hisabi/Product-Screen/buyNow.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:Hisabi/models/order_model.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class _CartScreenState extends State<CartScreen> {
   // Fetch cart items from the database
   Future<void> _loadCartItems() async {
     final currentUser = await DatabaseHelper().getCurrentUser();
+
     if (currentUser != null) {
       final items = await DatabaseHelper().getOrdersByUser(currentUser.id!);
       setState(() {
@@ -249,12 +251,13 @@ class _CartScreenState extends State<CartScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => buyNow(cartItems: cartItems),
-                        //   ),
-                        // );
+                        // Navigate to BuyNowScreen with all cart items
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BuyNowScreen(cartItems: cartItems),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFFF8D41),
@@ -272,6 +275,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                     ),
+
                   ),
                 ),
               ],

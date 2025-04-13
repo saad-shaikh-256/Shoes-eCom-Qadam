@@ -1,5 +1,3 @@
-// ProductDetail.dart
-
 import 'package:Hisabi/Product-Screen/buyNow.dart';
 import 'package:Hisabi/Product-Screen/cartScreen.dart';
 import 'package:Hisabi/db/db_helper.dart';
@@ -51,7 +49,6 @@ class _ProductDetailState extends State<ProductDetail> {
 
     final order = OrderModel(
       id: 0,
-      // You can auto-generate this ID in the database or let SQLite handle it
       productName: product!.name,
       productImage: product!.image,
       price: double.parse(product!.price.replaceAll(RegExp(r'[^\d.]'), '')),
@@ -59,17 +56,19 @@ class _ProductDetailState extends State<ProductDetail> {
       status: 'In Cart',
       orderDate: DateTime.now().toIso8601String(),
       address: '',
-      // You can collect address later
       userId: currentUser.id!,
-      productId: product!.id!, // Use the productId here
+      // Assuming the user is logged in and the id is non-null
+      productId: product!.id!,
     );
 
-    final result = await DatabaseHelper().insertOrder( userId: currentUser.id!,
-      productId: product!.id!,);
+    final result = await DatabaseHelper().insertOrder(
+      userId: currentUser.id!,
+      productId: product!.id!,
+      quantity: 1, // Default quantity
+    );
 
     if (result > 0) {
       debugPrint("✅ Added to cart, navigating to cart screen.");
-      // Using Flutter's Navigator.push() to navigate to CartScreen
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const CartScreen()),
@@ -198,13 +197,130 @@ class _ProductDetailState extends State<ProductDetail> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => buyNow(),
-                                  ),
+                              onPressed: () async {
+                                if (product == null) return;
+
+                                // Get the current logged-in user
+                                final currentUser =
+                                    await DatabaseHelper().getCurrentUser();
+                                if (currentUser == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "User not found. Please log in again.")),
+                                  );
+                                  return;
+                                }
+
+                                // Check if the product already exists in the cart (orders table)
+                                final existingOrder = await DatabaseHelper()
+                                    .getOrdersByUser(currentUser.id!);
+                                final existingProductOrder =
+                                    existingOrder.firstWhere(
+                                  (order) => order.productId == product!.id,
+                                  orElse: () => OrderModel(
+                                      id: 0,
+                                      productId: 0,
+                                      userId: 0,
+                                      quantity: 0,
+                                      status: '',
+                                      orderDate: '',
+                                      address: '',
+                                      productName: '',
+                                      productImage: '',
+                                      price: 0.0), // Default empty order
                                 );
+
+                                if (existingProductOrder.productId != 0) {
+                                  // Product is already in the cart, navigate to BuyNowScreen
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BuyNowScreen(
+                                        cartItems: [
+                                          OrderModel(
+                                            id: product!.id,
+                                            // Assuming the product has an ID
+                                            productName: product!.name,
+                                            // Product name
+                                            productImage: product!.image,
+                                            // Product image
+                                            price: double.parse(product!.price
+                                                .replaceAll(
+                                                    RegExp(r'[^\d.]'), '')),
+                                            // Product price
+                                            quantity: 1,
+                                            // Default quantity for a product
+                                            status: 'pending',
+                                            // Initial status
+                                            orderDate:
+                                                DateTime.now().toString(),
+                                            // Current date/time
+                                            address: '',
+                                            // Placeholder for address
+                                            userId: currentUser.id!,
+                                            // Ensure non-null user id
+                                            productId: product!
+                                                .id!, // Same as product ID
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  // Product is not in the cart, create a new order
+                                  final orderId =
+                                      await DatabaseHelper().insertOrder(
+                                    userId: currentUser.id!,
+                                    productId: product!.id!,
+                                    quantity: 1, // Default quantity is 1
+                                  );
+
+                                  if (orderId > 0) {
+                                    // Successfully added to cart, create OrderModel and navigate to BuyNowScreen
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BuyNowScreen(
+                                          cartItems: [
+                                            OrderModel(
+                                              id: product!.id,
+                                              // Product ID
+                                              productName: product!.name,
+                                              // Product name
+                                              productImage: product!.image,
+                                              // Product image
+                                              price: double.parse(product!.price
+                                                  .replaceAll(
+                                                      RegExp(r'[^\d.]'), '')),
+                                              // Convert price to double
+                                              quantity: 1,
+                                              // Default quantity
+                                              status: 'pending',
+                                              // Default status
+                                              orderDate:
+                                                  DateTime.now().toString(),
+                                              // Current date for order
+                                              address: '',
+                                              // Placeholder address (you can add logic to collect it later)
+                                              userId: currentUser.id!,
+                                              // Assuming `currentUser` is your logged-in user object
+                                              productId: product!
+                                                  .id!, // Pass productId
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    // Failed to add to the cart
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Failed to add product to cart.')),
+                                    );
+                                  }
+                                }
                               },
                               child: const Text(
                                 'Buy Now',
