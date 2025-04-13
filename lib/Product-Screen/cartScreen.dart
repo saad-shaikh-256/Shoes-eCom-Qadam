@@ -264,7 +264,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       child: Text(
-                        'Continue',
+                        'Proceed to Checkout',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

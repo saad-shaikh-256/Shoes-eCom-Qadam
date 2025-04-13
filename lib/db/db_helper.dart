@@ -257,16 +257,39 @@ class DatabaseHelper {
     int quantity = 1,
   }) async {
     final db = await database;
-    final now = DateTime.now().toIso8601String();
-    return await db.insert('orders', {
-      'user_id': userId,
-      'product_id': productId,
-      'quantity': quantity,
-      'status': 'In Cart',
-      'order_date': now,
-      'address': '',
-    });
+
+    // Check if the same product is already in cart
+    final existing = await db.query(
+      'orders',
+      where: 'user_id = ? AND product_id = ? AND status = ?',
+      whereArgs: [userId, productId, 'In Cart'],
+    );
+
+    if (existing.isNotEmpty) {
+      // Product already in cart -> update quantity
+      final currentQty = existing.first['quantity'] as int;
+      final newQty = currentQty + quantity;
+
+      return await db.update(
+        'orders',
+        {'quantity': newQty},
+        where: 'id = ?',
+        whereArgs: [existing.first['id']],
+      );
+    } else {
+      // New product in cart -> insert new row
+      final now = DateTime.now().toIso8601String();
+      return await db.insert('orders', {
+        'user_id': userId,
+        'product_id': productId,
+        'quantity': quantity,
+        'status': 'In Cart',
+        'order_date': now,
+        'address': '',
+      });
+    }
   }
+
 
 // Fetch orders with product info
   Future<List<OrderModel>> getOrdersByUser(int userId) async {
