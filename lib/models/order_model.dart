@@ -38,11 +38,13 @@ class OrderModel {
   }
 
   factory OrderModel.fromJoinedMap(Map<String, dynamic> map) {
+    String priceString = map['price'].toString().replaceAll(RegExp(r'[^\d.]'), '');
+
     return OrderModel(
       id: map['id'],
       productName: map['name'],
       productImage: map['image'],
-      price: map['price'] is double ? map['price'] : double.tryParse(map['price'].toString()) ?? 0.0,
+      price: double.tryParse(priceString) ?? 0.0,
       quantity: map['quantity'],
       status: map['status'],
       orderDate: map['order_date'],

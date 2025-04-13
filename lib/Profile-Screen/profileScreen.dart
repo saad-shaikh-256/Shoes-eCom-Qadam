@@ -1,4 +1,5 @@
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
+import 'package:Hisabi/Product-Screen/cartScreen.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -192,11 +193,54 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ),
                 ),
-                _buildProfileOption(
-                  icon: 'assets/icons/cartIcon.svg',
-                  title: 'Cart',
-                  onTap: () {},
+                Container(
+                  height: 56,
+                  margin: EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CartScreen()),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/cartIcon.svg',
+                          width: 24,
+                          color: Color(0xFFFF8D41),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            'Cart',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF616161),
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Color(0xFF9E9E9E),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+
                 _buildProfileOption(
                   icon: 'assets/icons/orderIcon.svg',
                   title: 'Order History ($orderCount)',

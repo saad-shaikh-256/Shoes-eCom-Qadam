@@ -278,6 +278,7 @@ class DatabaseHelper {
     WHERE o.user_id = ?
   ''', [userId]);
 
+    print("Query Results: $results");
     return results.map((map) => OrderModel.fromJoinedMap(map)).toList();
   }
 
