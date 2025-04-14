@@ -4,7 +4,7 @@
 
 ## Overview
 
-Qadam is a complete mobile e-commerce application for shoes built using Flutter and SQLite. The app features a fully functional product catalog, cart system, order history, and checkout flow — all managed locally. Designed with clean UI, smooth navigation, and essential features to simulate a real shopping experience.
+Qadam is a complete mobile e-commerce application for shoes built using Flutter and SQLite. The app features a fully functional product catalog, cart system, order history, and checkout flow all managed locally. Designed with clean UI, smooth navigation, and essential features to simulate a real shopping experience.
 
 ## Features
 
