@@ -1,5 +1,4 @@
 import 'package:Hisabi/Product-Screen/buyNow.dart';
-import 'package:Hisabi/Product-Screen/cartScreen.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:Hisabi/models/order_model.dart';
 import 'package:Hisabi/models/product_model.dart';
@@ -64,11 +63,20 @@ class _ProductDetailState extends State<ProductDetail> {
       quantity: 1,
     );
 
+    // if (result > 0) {
+    //   debugPrint("✅ Added to cart, navigating to cart screen.");
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => const CartScreen()),
+    //   );
+    // }
     if (result > 0) {
-      debugPrint("✅ Added to cart, navigating to cart screen.");
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CartScreen()),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('✅ Product added to cart!'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Color(0xFF4CAF50),
+        ),
       );
     } else {
       debugPrint("❌ Try again - insertOrder failed");

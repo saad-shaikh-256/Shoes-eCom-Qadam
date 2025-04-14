@@ -339,4 +339,16 @@ class DatabaseHelper {
         .rawQuery('SELECT COUNT(*) FROM orders WHERE user_id = ?', [userId]);
     return Sqflite.firstIntValue(result) ?? 0;
   }
+
+  static Future<void> updateUserPassword(
+      String email, String newPassword) async {
+    final db = await _instance.database;
+    await db.update(
+      'users',
+      {'password': newPassword.trim()},
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+  }
 }

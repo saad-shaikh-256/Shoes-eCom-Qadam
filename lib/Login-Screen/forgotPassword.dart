@@ -1,3 +1,4 @@
+import 'package:Hisabi/Login-Screen/changePassword.dart';
 import 'package:Hisabi/Login-Screen/loginScreen.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:flutter/material.dart';
@@ -26,28 +27,13 @@ class _forgotPassword extends State<forgotPassword> {
       bool exists = await DatabaseHelper.isEmailExist(email);
 
       if (exists) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Coming Soon"),
-              content:
-                  Text("Password reset feature is currently not available."),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
-                  },
-                  child: Text("OK"),
-                ),
-              ],
-            );
-          },
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChangePasswordScreen(email: email),
+          ),
         );
+
       } else {
         setState(() {
           emailError = "No email found";

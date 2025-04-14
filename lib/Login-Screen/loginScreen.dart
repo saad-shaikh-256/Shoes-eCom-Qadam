@@ -16,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreen extends State<LoginScreen> {
   bool isHidden = true;
+  bool isLoading = false;
   var formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -45,6 +46,9 @@ class _LoginScreen extends State<LoginScreen> {
   String? passwordError;
 
   void submit() async {
+    setState(() {
+      isLoading = true;
+    });
     setState(() {
       emailError = null;
       passwordError = null;
