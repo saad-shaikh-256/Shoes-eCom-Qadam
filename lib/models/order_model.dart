@@ -7,7 +7,6 @@ class OrderModel {
   String orderDate;
   String address;
 
-  // These will be loaded from joined product data
   String productName;
   String productImage;
   double price;

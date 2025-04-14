@@ -40,7 +40,6 @@ class _SignUpScreen extends State<Signupscreen> {
       print(
           "👉 Name: $name, Email: $email, Phone: $phone, Password: $password");
 
-      // Check for existing user
       UserModel? existingUser = await dbHelper.getUserByEmail(email);
       if (existingUser != null) {
         setState(() {
@@ -53,7 +52,6 @@ class _SignUpScreen extends State<Signupscreen> {
         return;
       }
 
-      // Insert new user
       UserModel newUser = UserModel(
         name: name,
         email: email,
@@ -131,7 +129,6 @@ class _SignUpScreen extends State<Signupscreen> {
                           ),
                           SizedBox(height: 20),
 
-                          // Email
                           buildTextField(
                             controller: emailController,
                             focusNode: emailFocusNode,
@@ -164,7 +161,6 @@ class _SignUpScreen extends State<Signupscreen> {
                             ),
                           SizedBox(height: 20),
 
-                          // Phone
                           buildTextField(
                             controller: phoneController,
                             focusNode: phoneFocusNode,
@@ -181,7 +177,6 @@ class _SignUpScreen extends State<Signupscreen> {
                           ),
                           SizedBox(height: 20),
 
-                          // Password
                           buildTextField(
                             controller: passwordController,
                             focusNode: passwordFocusNode,
@@ -221,7 +216,6 @@ class _SignUpScreen extends State<Signupscreen> {
                   ],
                 ),
 
-                // Bottom section
                 Column(
                   children: [
                     SizedBox(height: 40),

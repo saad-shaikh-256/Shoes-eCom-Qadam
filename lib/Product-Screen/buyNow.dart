@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BuyNowScreen extends StatefulWidget {
-  final List<OrderModel> cartItems; // Accept cart items
+  final List<OrderModel> cartItems;
 
   const BuyNowScreen({Key? key, required this.cartItems}) : super(key: key);
 

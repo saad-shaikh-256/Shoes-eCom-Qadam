@@ -1,4 +1,3 @@
-// lib/Product-Screen/cartScreen.dart
 import 'package:Hisabi/Product-Screen/buyNow.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:Hisabi/models/order_model.dart';
@@ -21,7 +20,6 @@ class _CartScreenState extends State<CartScreen> {
     _loadCartItems();
   }
 
-  // Fetch cart items from the database
   Future<void> _loadCartItems() async {
     final currentUser = await DatabaseHelper().getCurrentUser();
 
@@ -33,39 +31,34 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
-  // Function to increase the quantity of a product in the cart
   Future<void> _increaseQuantity(int orderId) async {
     final order = cartItems.firstWhere((item) => item.id == orderId);
     if (order.quantity < 10) {
-      // Limit quantity increase to 10
       order.quantity++;
       final result =
           await DatabaseHelper().updateOrderQuantity(order.id!, order.quantity);
       if (result > 0) {
-        _loadCartItems(); // Refresh cart
+        _loadCartItems();
       }
     }
   }
 
-  // Function to decrease the quantity of a product in the cart
   Future<void> _decreaseQuantity(int orderId) async {
     final order = cartItems.firstWhere((item) => item.id == orderId);
     if (order.quantity > 1) {
-      // Ensure quantity does not go below 1
       order.quantity--;
       final result =
           await DatabaseHelper().updateOrderQuantity(order.id!, order.quantity);
       if (result > 0) {
-        _loadCartItems(); // Refresh cart
+        _loadCartItems();
       }
     }
   }
 
-  // Function to remove a product from the cart
   Future<void> _removeItem(int orderId) async {
     final result = await DatabaseHelper().deleteOrder(orderId);
     if (result > 0) {
-      _loadCartItems(); // Refresh cart
+      _loadCartItems();
     }
   }
 
@@ -138,7 +131,6 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                 ),
                                 SizedBox(width: 24),
-                                // Product Details
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -251,7 +243,6 @@ class _CartScreenState extends State<CartScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to BuyNowScreen with all cart items
                         Navigator.push(
                           context,
                           MaterialPageRoute(

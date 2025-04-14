@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Hisabi/db/db_helper.dart';
 import 'package:Hisabi/models/user_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel currentUser;
 
-  const EditProfileScreen({Key? key, required this.currentUser}) : super(key: key);
+  const EditProfileScreen({Key? key, required this.currentUser})
+      : super(key: key);
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -34,7 +35,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     nameController = TextEditingController(text: widget.currentUser.name);
     emailController = TextEditingController(text: widget.currentUser.email);
     phoneController = TextEditingController(text: widget.currentUser.phone);
-    passwordController = TextEditingController(text: widget.currentUser.password);
+    passwordController =
+        TextEditingController(text: widget.currentUser.password);
   }
 
   @override
@@ -57,7 +59,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         name: nameController.text.trim(),
         email: emailController.text.trim(),
         phone: phoneController.text.trim(),
-        password: widget.currentUser.password, // Don't change password
+        password: widget.currentUser.password,
       );
 
       await dbHelper.updateUser(updatedUser);
@@ -95,7 +97,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 Column(
                   children: [
-                    // Header
                     Row(
                       children: [
                         GestureDetector(
@@ -121,21 +122,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         SizedBox(width: 24),
                       ],
                     ),
-
                     SizedBox(height: 32),
-
-                    // Profile Picture
                     Stack(
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage: AssetImage('assets/Images/Home/profile.png'),
+                          backgroundImage:
+                              AssetImage('assets/Images/Home/profile.png'),
                         ),
                       ],
                     ),
                     SizedBox(height: 32),
-
-                    // Form Fields
                     Form(
                       key: formKey,
                       child: Column(
@@ -146,10 +143,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             hintText: 'Full Name',
                             iconPath: 'assets/icons/userIcon.svg',
                             validator: (value) =>
-                            value!.isEmpty ? 'Enter your full name' : null,
+                                value!.isEmpty ? 'Enter your full name' : null,
                           ),
                           SizedBox(height: 20),
-
                           buildTextField(
                             controller: emailController,
                             focusNode: emailFocusNode,
@@ -181,7 +177,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                             ),
                           SizedBox(height: 20),
-
                           buildTextField(
                             controller: phoneController,
                             focusNode: phoneFocusNode,
@@ -197,7 +192,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             },
                           ),
                           SizedBox(height: 20),
-
                           buildTextField(
                             controller: passwordController,
                             focusNode: passwordFocusNode,
@@ -211,8 +205,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ],
                 ),
-
-                // Save Button
                 Column(
                   children: [
                     SizedBox(
@@ -257,7 +249,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     bool obscureText = false,
     void Function(String)? onChanged,
     Widget? suffixIcon,
-    bool enabled = true, // ✅ Add enabled toggle
+    bool enabled = true,
   }) {
     return Container(
       height: 52,
@@ -297,4 +289,3 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 }
-

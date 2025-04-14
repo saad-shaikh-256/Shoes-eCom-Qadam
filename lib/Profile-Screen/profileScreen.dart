@@ -265,7 +265,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => OrderHistoryScreen(userId: currentUser!.id!), // Replace with your user model's id
+                          builder: (context) =>
+                              OrderHistoryScreen(userId: currentUser!.id!),
                         ),
                       );
                     },
@@ -296,12 +297,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
-          // Delete Account Button
           Container(
             padding: EdgeInsets.all(16),
             child: SizedBox(
@@ -411,7 +409,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           TextButton(
             onPressed: () async {
-              Navigator.pop(context); // Close the dialog
+              Navigator.pop(context);
 
               final currentUser = await DatabaseHelper().getCurrentUser();
               if (currentUser != null) {

@@ -24,7 +24,6 @@ class _ProductDetailState extends State<ProductDetail> {
     loadProduct();
   }
 
-  // Load product details from the database
   Future<void> loadProduct() async {
     final fetchedProduct =
         await DatabaseHelper().getProductById(widget.productId!);
@@ -35,7 +34,6 @@ class _ProductDetailState extends State<ProductDetail> {
     }
   }
 
-  // Add the product to the cart
   Future<void> addToCart() async {
     if (product == null) return;
 
@@ -57,14 +55,13 @@ class _ProductDetailState extends State<ProductDetail> {
       orderDate: DateTime.now().toIso8601String(),
       address: '',
       userId: currentUser.id!,
-      // Assuming the user is logged in and the id is non-null
       productId: product!.id!,
     );
 
     final result = await DatabaseHelper().insertOrder(
       userId: currentUser.id!,
       productId: product!.id!,
-      quantity: 1, // Default quantity
+      quantity: 1,
     );
 
     if (result > 0) {
@@ -200,7 +197,6 @@ class _ProductDetailState extends State<ProductDetail> {
                               onPressed: () async {
                                 if (product == null) return;
 
-                                // Get the current logged-in user
                                 final currentUser =
                                     await DatabaseHelper().getCurrentUser();
                                 if (currentUser == null) {
@@ -212,7 +208,6 @@ class _ProductDetailState extends State<ProductDetail> {
                                   return;
                                 }
 
-                                // Check if the product already exists in the cart (orders table)
                                 final existingOrder = await DatabaseHelper()
                                     .getOrdersByUser(currentUser.id!);
                                 final existingProductOrder =
@@ -228,11 +223,10 @@ class _ProductDetailState extends State<ProductDetail> {
                                       address: '',
                                       productName: '',
                                       productImage: '',
-                                      price: 0.0), // Default empty order
+                                      price: 0.0),
                                 );
 
                                 if (existingProductOrder.productId != 0) {
-                                  // Product is already in the cart, navigate to BuyNowScreen
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -240,44 +234,32 @@ class _ProductDetailState extends State<ProductDetail> {
                                         cartItems: [
                                           OrderModel(
                                             id: product!.id,
-                                            // Assuming the product has an ID
                                             productName: product!.name,
-                                            // Product name
                                             productImage: product!.image,
-                                            // Product image
                                             price: double.parse(product!.price
                                                 .replaceAll(
                                                     RegExp(r'[^\d.]'), '')),
-                                            // Product price
                                             quantity: 1,
-                                            // Default quantity for a product
                                             status: 'pending',
-                                            // Initial status
                                             orderDate:
                                                 DateTime.now().toString(),
-                                            // Current date/time
                                             address: '',
-                                            // Placeholder for address
                                             userId: currentUser.id!,
-                                            // Ensure non-null user id
-                                            productId: product!
-                                                .id!, // Same as product ID
+                                            productId: product!.id!,
                                           ),
                                         ],
                                       ),
                                     ),
                                   );
                                 } else {
-                                  // Product is not in the cart, create a new order
                                   final orderId =
                                       await DatabaseHelper().insertOrder(
                                     userId: currentUser.id!,
                                     productId: product!.id!,
-                                    quantity: 1, // Default quantity is 1
+                                    quantity: 1,
                                   );
 
                                   if (orderId > 0) {
-                                    // Successfully added to cart, create OrderModel and navigate to BuyNowScreen
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -285,35 +267,24 @@ class _ProductDetailState extends State<ProductDetail> {
                                           cartItems: [
                                             OrderModel(
                                               id: product!.id,
-                                              // Product ID
                                               productName: product!.name,
-                                              // Product name
                                               productImage: product!.image,
-                                              // Product image
                                               price: double.parse(product!.price
                                                   .replaceAll(
                                                       RegExp(r'[^\d.]'), '')),
-                                              // Convert price to double
                                               quantity: 1,
-                                              // Default quantity
                                               status: 'pending',
-                                              // Default status
                                               orderDate:
                                                   DateTime.now().toString(),
-                                              // Current date for order
                                               address: '',
-                                              // Placeholder address (you can add logic to collect it later)
                                               userId: currentUser.id!,
-                                              // Assuming `currentUser` is your logged-in user object
-                                              productId: product!
-                                                  .id!, // Pass productId
+                                              productId: product!.id!,
                                             ),
                                           ],
                                         ),
                                       ),
                                     );
                                   } else {
-                                    // Failed to add to the cart
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(

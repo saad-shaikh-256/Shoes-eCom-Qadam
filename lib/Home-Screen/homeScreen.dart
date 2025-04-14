@@ -4,7 +4,6 @@ import 'package:Hisabi/db/db_helper.dart';
 import 'package:Hisabi/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Hisabi/Product-Screen/productDetails.dart';
 
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
@@ -51,7 +50,6 @@ class homeScreenState extends State<homeScreen> {
     final allProducts = await DatabaseHelper().getAllProducts();
     List<ProductModel> filteredProducts;
 
-    // Filter by category first
     if (selectedCategory == 'All') {
       filteredProducts = allProducts;
     } else {
@@ -60,7 +58,6 @@ class homeScreenState extends State<homeScreen> {
           .toList();
     }
 
-    // Then filter by search query if provided
     if (query != null && query.isNotEmpty) {
       filteredProducts = filteredProducts
           .where((product) =>
@@ -162,7 +159,7 @@ class homeScreenState extends State<homeScreen> {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
                             borderSide: BorderSide(
-                              color: Color(0xFFEEEEEE), // Inactive border color
+                              color: Color(0xFFEEEEEE),
                               width: 1,
                             ),
                           ),
@@ -261,8 +258,7 @@ class homeScreenState extends State<homeScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio:
-                    0.6, // Adjusted aspect ratio for more height
+                    childAspectRatio: 0.6,
                   ),
                   itemCount: productList.length,
                   itemBuilder: (context, index) {
@@ -272,7 +268,8 @@ class homeScreenState extends State<homeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetail(productId: product.id!), // Ensure the 'product.id!' is non-null
+                            builder: (context) =>
+                                ProductDetail(productId: product.id!),
                           ),
                         );
                       },

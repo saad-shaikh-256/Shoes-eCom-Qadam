@@ -36,7 +36,7 @@ class _forgotPassword extends State<forgotPassword> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context); // Close the dialog
+                    Navigator.pop(context);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -103,7 +103,6 @@ class _forgotPassword extends State<forgotPassword> {
                         key: formKey,
                         child: Column(
                           children: [
-                            // Email Field
                             Container(
                               height: 52,
                               width: width,
@@ -174,7 +173,6 @@ class _forgotPassword extends State<forgotPassword> {
                     ],
                   ),
 
-                  // Bottom Button
                   Container(
                     width: width,
                     child: Column(

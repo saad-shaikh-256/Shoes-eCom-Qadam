@@ -12,8 +12,6 @@
       required this.phone,
       required this.password,
     });
-
-    // Convert a User into a Map. The keys must match the column names in SQLite.
     Map<String, dynamic> toMap() {
       return {
         'id': id,
@@ -24,7 +22,6 @@
       };
     }
 
-    // Convert a Map into a User
     factory UserModel.fromMap(Map<String, dynamic> map) {
       return UserModel(
         id: map['id'],

@@ -1,7 +1,8 @@
+import 'package:Hisabi/Home-Screen/homeScreen.dart';
+import 'package:Hisabi/db/db_helper.dart';
+import 'package:Hisabi/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Hisabi/models/order_model.dart';
-import 'package:Hisabi/db/db_helper.dart';
 
 class ConfirmOrderScreen extends StatelessWidget {
   final List<OrderModel> cartItems;
@@ -13,7 +14,8 @@ class ConfirmOrderScreen extends StatelessWidget {
     required this.address,
   }) : super(key: key);
 
-  double get subtotal => cartItems.fold(0, (sum, item) => sum + item.price * item.quantity);
+  double get subtotal =>
+      cartItems.fold(0, (sum, item) => sum + item.price * item.quantity);
 
   Future<void> placeOrder(BuildContext context) async {
     final db = DatabaseHelper();
@@ -34,7 +36,11 @@ class ConfirmOrderScreen extends StatelessWidget {
         ),
       ),
     );
-    Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => homeScreen()),
+          (route) => false,
+    );
   }
 
   @override
@@ -72,7 +78,6 @@ class ConfirmOrderScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Address Card
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -120,7 +125,6 @@ class ConfirmOrderScreen extends StatelessWidget {
             ),
           ),
 
-          // Order Items
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -198,7 +202,6 @@ class ConfirmOrderScreen extends StatelessWidget {
             ),
           ),
 
-          // Order Summary
           Container(
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -210,7 +213,8 @@ class ConfirmOrderScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _buildSummaryRow('Subtotal', '₹ ${subtotal.toStringAsFixed(2)}'),
+                _buildSummaryRow(
+                    'Subtotal', '₹ ${subtotal.toStringAsFixed(2)}'),
                 SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,

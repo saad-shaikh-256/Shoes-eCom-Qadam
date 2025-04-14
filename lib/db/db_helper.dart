@@ -171,6 +171,7 @@ class DatabaseHelper {
     }
   }
 
+
   static Future<bool> isEmailExist(String email) async {
     final db = await _instance.database;
     List<Map<String, dynamic>> result = await db.query(

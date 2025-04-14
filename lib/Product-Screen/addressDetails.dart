@@ -1,12 +1,14 @@
 import 'package:Hisabi/Product-Screen/confirmOrder.dart';
+import 'package:Hisabi/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Hisabi/db/db_helper.dart';
-import 'package:Hisabi/models/order_model.dart';
 
 class AddressFormScreen extends StatefulWidget {
   final List<OrderModel> cartItems;
-  const AddressFormScreen({Key? key, required this.cartItems}) : super(key: key);
+
+  const AddressFormScreen({Key? key, required this.cartItems})
+      : super(key: key);
+
   @override
   _AddressFormScreenState createState() => _AddressFormScreenState();
 }
@@ -32,7 +34,6 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
         ),
       );
     }
-
   }
 
   @override
@@ -88,9 +89,8 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                       key: formKey,
                       child: Column(
                         children: [
-                          // Address Field
                           Container(
-                            height: 120, // Taller for address input
+                            height: 120,
                             width: width,
                             child: TextFormField(
                               controller: addressController,
@@ -149,8 +149,6 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                     ),
                   ],
                 ),
-
-                // Next Button (matches login button exactly)
                 Container(
                   height: 54,
                   width: width,

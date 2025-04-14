@@ -94,7 +94,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Product Image
                         Container(
                           width: 80,
                           height: 80,
@@ -107,7 +106,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           ),
                         ),
                         SizedBox(width: 16),
-                        // Order Details
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,11 +155,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                   color: Color(0xFFFF8D41),
                                 ),
                               ),
-
                             ],
                           ),
                         ),
-                        // Order Date
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
