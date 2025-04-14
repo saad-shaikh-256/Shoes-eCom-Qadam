@@ -49,7 +49,7 @@ class _LoginScreen extends State<LoginScreen> {
     setState(() {
       isLoading = true;
     });
-    setState(() {
+    setState(() { 
       emailError = null;
       passwordError = null;
     });
