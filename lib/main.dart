@@ -1,8 +1,6 @@
-import 'package:Hisabi/Home-Screen/homeScreen.dart';
 import 'package:Hisabi/Splash-Screen/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 // import 'db/db_helper.dart';
 
 void main() async {
