@@ -1,0 +1,59 @@
+name: Hisabi
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^1.0.0
+  get: ^4.6.5
+  cupertino_icons: ^1.0.0
+  flutterfire_cli: ^0.2.7
+  sqflite: ^2.4.1
+  path: ^1.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/appIcon/appIcon.png"
+
+flutter:
+  assets:
+    - assets/logo/Logo.svg
+    - assets/icons/appleIcon.svg
+    - assets/icons/googleIcon.svg
+    - assets/icons/facebookIcon.svg
+    - assets/icons/mailIcon.svg
+    - assets/icons/phoneIcon.svg
+    - assets/icons/userIcon.svg
+    - assets/icons/lockIcon.svg
+    - assets/icons/viewIcon.svg
+    - assets/icons/hideIcon.svg
+    - assets/icons/cartIcon.svg
+    - assets/icons/searchIcon.svg
+    - assets/icons/backIcon.svg
+    - assets/icons/orderIcon.svg
+    - assets/icons/locationIcon.svg
+    - assets/Images/Home/profile.png
+    - assets/Images/Home/Shoes/Shoes1.png
+    - assets/Images/Home/Shoes/Shoes2.png
+    - assets/Images/Home/Shoes/Shoes3.png
+    - assets/Images/Home/Shoes/Shoes4.png
+    - assets/Images/Home/Shoes/Shoes5.png
+    - assets/Images/Home/Shoes/Shoes6.png
+    - assets/Images/Home/Shoes/Shoes7.png
+    - assets/Images/Home/Shoes/Shoes8.png
+
+  uses-material-design: true
