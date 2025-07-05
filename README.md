@@ -11,6 +11,11 @@
 - **[Project Repository](https://github.com/saad-shaikh-256/Shoes-eCom-Qadam)**
   <br>Check out the code, screenshots, and try the project on your device.
 
+## 🎨 Figma UI Inspiration
+
+- **[Figma Design File](https://www.figma.com/community/file/1287718860825078294/shoes-ecom)**
+  <br>View or duplicate the original Figma design.
+
 ---
 
 ## ✨ Features
